@@ -1,0 +1,21 @@
+{
+	"css.lint.unknownAtRules": "ignore", // tailwindcss
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit",
+		"source.organizeImports": "explicit"
+	},
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
+	"editor.insertSpaces": false,
+	"eslint.validate": ["javascript", "javascriptreact", "svelte"], // eslint-plugin-svelte
+	"files.associations": {
+		".env.*": "properties" // vite
+	},
+	"files.insertFinalNewline": true,
+	"js/ts.implicitProjectConfig.checkJs": true,
+	"svelte.enable-ts-plugin": true,
+	"workbench.editor.customLabels.enabled": true,
+	"workbench.editor.customLabels.patterns": {
+		"**/src/routes/**/+*": "${dirname} / ${filename}"
+	}
+}
