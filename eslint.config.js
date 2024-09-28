@@ -26,5 +26,11 @@ export default tseslint.config(
 			}
 		}
 	},
-	{ ignores: ['build/', '.svelte-kit/', 'dist/'] }
+	{ ignores: ['.svelte-kit/', 'build/', 'dist/', 'drizzle/'] },
+	{
+		rules: {
+			'no-console': ['error', { allow: ['warn', 'error'] }],
+			'no-restricted-imports': ['error', 'assert', 'node:assert']
+		}
+	}
 );
