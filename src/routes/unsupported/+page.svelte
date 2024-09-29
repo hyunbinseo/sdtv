@@ -1,3 +1,7 @@
+<script>
+	import { t } from './i18n.ts';
+</script>
+
 <svelte:head>
 	<!-- Reference src/routes/+layout.svelte -->
 	<script>
@@ -10,3 +14,10 @@
 	</script>
 	<meta name="robots" content="noindex" />
 </svelte:head>
+
+<!-- Use CSS supported by legacy browsers. -->
+
+<main class="p-4">
+	<h1 class="text-2xl font-bold">{t.heading}</h1>
+	<p>{t.message}</p>
+</main>

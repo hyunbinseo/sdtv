@@ -1,4 +1,6 @@
 import { dev } from '$app/environment';
+import type { PageLoad } from './$types.js';
+import { t } from './i18n.ts';
 
 export const prerender = true;
 
@@ -6,3 +8,5 @@ export const prerender = true;
 // Generate a plain HTML and CSS page by disabling CSR.
 // Reference https://kit.svelte.dev/docs/page-options#csr
 export const csr = dev;
+
+export const load = (() => ({ pageTitle: t.title })) satisfies PageLoad;
