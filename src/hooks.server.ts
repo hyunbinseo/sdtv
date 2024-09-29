@@ -9,5 +9,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 		transformPageChunk: ({ html }) => html.replace('%lang%', VITE_LOCALE)
 	});
 
+	try {
+		// Reference https://github.com/sveltejs/kit/issues/6790
+		response.headers.delete('link');
+	} catch {
+		// Reference https://github.com/sveltejs/kit/issues/11883
+	}
+
 	return response;
 };
