@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Component class names should be added to the `tailwind.config.js` file. */
+/* - CSS file enables `@apply` syntax and class name sorting using Prettier. */
+/* - Plugin `addComponents()` enables VS Code Intellisense and autocomplete. */
+/* Reference https://github.com/tailwindlabs/tailwindcss/discussions/11012 */
+/* Reference https://github.com/tailwindlabs/tailwindcss-intellisense/issues/227 */
+
+/* User-Agent */
+@layer components {
+	.ua-anchor {
+		@apply cursor-pointer text-[#0000EE] underline visited:text-[#551A8B] active:text-[#FF0000];
+	}
+}

@@ -5,6 +5,7 @@
 
 	import { page } from '$app/stores';
 	import { PUBLIC_SITE_NAME as SITE_NAME } from '$env/static/public';
+	import '../app.css';
 
 	let { children } = $props();
 </script>
