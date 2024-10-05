@@ -14,3 +14,17 @@
 		@apply cursor-pointer text-[#0000EE] underline visited:text-[#551A8B] active:text-[#FF0000];
 	}
 }
+
+@layer utilities {
+	/* `dvh` has less browser support than `:has()`. */
+	/* Reference https://caniuse.com/mdn-api_css_dvh_static */
+	/* Reference https://github.com/tailwindlabs/tailwindcss/pull/11317#issuecomment-1821960839 */
+	.min-h-screen {
+		min-height: 100vh;
+		min-height: 100dvh;
+	}
+	.h-screen {
+		height: 100vh;
+		height: 100dvh;
+	}
+}
