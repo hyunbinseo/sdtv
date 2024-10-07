@@ -11,7 +11,9 @@ export default {
 			// Actual styles are defined in the `app.css` file.
 			// Key order matches the Prettier sorting order.
 			addComponents({
-				'.ua-anchor': {}
+				'.ua-anchor': {},
+				'.tw-checkbox': {},
+				'.tw-checkbox-checked': {}
 			});
 			addUtilities({
 				// Reference https://tailwindcss.com/docs/font-size
