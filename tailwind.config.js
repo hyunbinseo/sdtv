@@ -25,7 +25,15 @@ export default {
 			addComponents({
 				'.ua-anchor': {},
 				'.tw-checkbox': {},
-				'.tw-checkbox-checked': {}
+				'.tw-checkbox-checked': {},
+				'.btn': {},
+				'.btn-xs': {},
+				'.btn-sm': {},
+				'.btn-lg': {},
+				'.btn-primary': {},
+				'.btn-secondary': {},
+				'.btn-danger': {},
+				'.btn-spinner': {}
 			});
 			addUtilities({
 				// Reference https://tailwindcss.com/docs/font-size
