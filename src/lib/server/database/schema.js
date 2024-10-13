@@ -3,4 +3,5 @@
 // This is used to type relational queries.
 // Reference https://orm.drizzle.team/docs/rqb
 
+export * from './schema/role.ts';
 export * from './schema/user.ts';
