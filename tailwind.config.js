@@ -1,15 +1,27 @@
 import forms from '@tailwindcss/forms';
+import defaultTheme from 'tailwindcss/defaultTheme';
 import plugin from 'tailwindcss/plugin';
 
 /** @type {import('tailwindcss').Config} */
 export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
-	theme: { extend: {} },
+	theme: {
+		// 320px: iPhone SE
+		// 360px: Galaxy S24
+		// 375px: iPhone SE (2020, 2022)
+		// 384px: Galaxy S24+, S24 Ultra
+		// 393px: iPhone 16
+		// 402px: iPhone 16 Pro
+		// 430px: iPhone 16 Plus
+		// 440px: iPhone 16 Pro Max
+		screens: { xs: '441px', ...defaultTheme.screens },
+		extend: { width: { 'screen-xs': '441px' } }
+	},
 	plugins: [
 		forms,
 		plugin(({ addComponents, addUtilities, addVariant }) => {
 			// Actual styles are defined in the `app.css` file.
-			// Key order matches the Prettier sorting order.
+			// Component order matches Prettier sorting order.
 			addComponents({
 				'.ua-anchor': {},
 				'.tw-checkbox': {},
