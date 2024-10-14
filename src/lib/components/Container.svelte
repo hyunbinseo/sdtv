@@ -20,14 +20,19 @@
 <div class="relative flex min-h-screen justify-center md:py-16">
 	<div class="flex w-full max-w-screen-md flex-col bg-white">
 		<noscript class="bg-yellow-300 p-2">{t.noscript}</noscript>
+		<a
+			href="#main-content"
+			class="btn btn-primary rounded-none [&:not(:focus)]:sr-only"
+			data-sveltekit-reload>{t['skip-to-content']}</a
+		>
 		<!-- `z-index` keeps the `position: relative` children from scrolling above. -->
-		<div class="top-0 z-10 bg-white sm:sticky" class:max-sm:sticky={!bottomNav}>
+		<div class="top-0 z-10 bg-white/75 backdrop-blur sm:sticky" class:max-sm:sticky={!bottomNav}>
 			{@render topNav?.()}
 		</div>
-		<div class="flex-1 p-[--container-padding]">
+		<div id="main-content" class="flex-1 p-[--container-padding]">
 			{@render children?.()}
 		</div>
-		<div class="sticky bottom-0 z-10 bg-white sm:hidden">
+		<div class="sticky bottom-0 z-10 bg-white/75 backdrop-blur sm:hidden">
 			{@render bottomNav?.()}
 		</div>
 	</div>
