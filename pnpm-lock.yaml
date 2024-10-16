@@ -15,11 +15,11 @@ importers:
         specifier: ^11.3.0
         version: 11.3.0
       drizzle-kit:
-        specifier: ^0.25.0
-        version: 0.25.0
+        specifier: ^0.26.1
+        version: 0.26.1
       drizzle-orm:
-        specifier: ^0.34.1
-        version: 0.34.1(@types/better-sqlite3@7.6.11)(better-sqlite3@11.3.0)
+        specifier: ^0.35.0
+        version: 0.35.0(@types/better-sqlite3@7.6.11)(better-sqlite3@11.3.0)
       ulid:
         specifier: ^2.3.0
         version: 2.3.0
@@ -1000,12 +1000,12 @@ packages:
   dlv@1.1.3:
     resolution: {integrity: sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==}
 
-  drizzle-kit@0.25.0:
-    resolution: {integrity: sha512-Rcf0nYCAKizwjWQCY+d3zytyuTbDb81NcaPor+8NebESlUz1+9W3uGl0+r9FhU4Qal5Zv9j/7neXCSCe7DHzjA==}
+  drizzle-kit@0.26.1:
+    resolution: {integrity: sha512-5/e1tzOPicPDooCm/uJIU9mWK3eD5dhW5EY61TQyVVo29xYxFLmZpXlBdOYlbfDHBsNhVzhb0XjWFmAAj7d7WA==}
     hasBin: true
 
-  drizzle-orm@0.34.1:
-    resolution: {integrity: sha512-t+zCwyWWt8xTqtYV4doE/xYmT7hpv1L8pQ66zddEz+3VWyedBBtctjMAp22mAJPfyWurRQXUJ1nrTtqLq+DqNA==}
+  drizzle-orm@0.35.0:
+    resolution: {integrity: sha512-fyTKnQ6WZQqSUy6yM4Do2tJPBg1ALR0vJtO9xUTLLubD+0qS1PPuu8aVOeLZQo+g8RPJn+Vqoh30/3lSS8/a2w==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=3'
@@ -2737,7 +2737,7 @@ snapshots:
 
   dlv@1.1.3: {}
 
-  drizzle-kit@0.25.0:
+  drizzle-kit@0.26.1:
     dependencies:
       '@drizzle-team/brocli': 0.10.1
       '@esbuild-kit/esm-loader': 2.6.5
@@ -2746,7 +2746,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.34.1(@types/better-sqlite3@7.6.11)(better-sqlite3@11.3.0):
+  drizzle-orm@0.35.0(@types/better-sqlite3@7.6.11)(better-sqlite3@11.3.0):
     optionalDependencies:
       '@types/better-sqlite3': 7.6.11
       better-sqlite3: 11.3.0

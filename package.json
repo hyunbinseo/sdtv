@@ -17,8 +17,8 @@
 	"dependencies": {
 		"@hyunbinseo/tools": "^0.3.2",
 		"better-sqlite3": "^11.3.0",
-		"drizzle-kit": "^0.25.0",
-		"drizzle-orm": "^0.34.1",
+		"drizzle-kit": "^0.26.1",
+		"drizzle-orm": "^0.35.0",
 		"ulid": "^2.3.0",
 		"valibot": "^0.42.1"
 	},
