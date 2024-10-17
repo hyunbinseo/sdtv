@@ -13,9 +13,6 @@ export const roleTable = sqliteTable('role', {
 		.notNull()
 		.references(() => userTable.id),
 	role: text({ enum: Roles }).notNull(),
-	assignedAt: integer({ mode: 'timestamp' })
-		.notNull()
-		.$default(() => new Date()),
 	assignedBy: text()
 		.notNull()
 		.references(() => userTable.id),
