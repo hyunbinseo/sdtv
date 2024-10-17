@@ -15,7 +15,21 @@ export default {
 		// 430px: iPhone 16 Plus
 		// 440px: iPhone 16 Pro Max
 		screens: { xs: '441px', ...defaultTheme.screens },
-		extend: { width: { 'screen-xs': '441px' } }
+		extend: {
+			boxShadow: {
+				bottom: [
+					'0px 2px 4px -3px rgba(0, 0, 0, 0.2)',
+					'0px 4px 5px -2px rgba(0, 0, 0, 0.14)',
+					'0px 1px 10px -10px rgba(0, 0, 0, 0.12)'
+				].join(', '),
+				top: [
+					'0px -2px 4px -3px rgba(0, 0, 0, 0.2)',
+					'0px -4px 5px -2px rgba(0, 0, 0, 0.14)',
+					'0px -1px 10px -10px rgba(0, 0, 0, 0.12)'
+				].join(', ')
+			},
+			width: { 'screen-xs': '441px' }
+		}
 	},
 	plugins: [
 		forms,
