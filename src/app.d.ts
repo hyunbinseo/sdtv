@@ -1,4 +1,6 @@
-// See https://kit.svelte.dev/docs/types#app
+import type { Role } from '$lib/server/database/schema.js';
+
+// See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
 declare global {
 	namespace App {

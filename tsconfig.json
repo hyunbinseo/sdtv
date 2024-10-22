@@ -33,6 +33,6 @@
 		"./database/**/*.js",
 		"./database/**/*.ts"
 	]
-	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
-	// except $lib which is handled by https://kit.svelte.dev/docs/configuration#files
+	// Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
+	// except $lib which is handled by https://svelte.dev/docs/kit/configuration#files
 }
