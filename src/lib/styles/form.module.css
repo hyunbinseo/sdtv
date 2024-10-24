@@ -1,0 +1,33 @@
+form.stacked {
+	label {
+		> span:first-child {
+			@apply text-smallish;
+			&:has(+ :required) {
+				@apply after:text-red-800 after:content-['*'];
+			}
+			+ select,
+			+ textarea,
+			/* Reference https://tailwindcss-forms.vercel.app/kitchen-sink.html */
+			+ input:not([type='checkbox'], [type='radio'], [type='range'], [type='color'], [type='file']) {
+				@apply mt-1 block w-full;
+			}
+		}
+		&:has(> input:first-child:is([type='checkbox'], [type='radio']) + span:last-child) {
+			@apply flex items-center gap-x-2;
+			> :required + span {
+				@apply after:text-red-800 after:content-['*'];
+			}
+		}
+	}
+}
+
+form.underline {
+	select,
+	textarea,
+	input:not([type='checkbox'], [type='radio'], [type='range'], [type='color'], [type='file']) {
+		@apply mt-0 border-0 border-b-2 border-gray-200 px-0 user-invalid:border-red-200;
+	}
+	select {
+		@apply pr-10; /* Reference https://github.com/tailwindlabs/tailwindcss-forms/pull/168 */
+	}
+}
