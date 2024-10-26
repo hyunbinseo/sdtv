@@ -4,7 +4,6 @@ import type { Role } from '$lib/server/database/schema.js';
 // for information about these interfaces
 declare global {
 	namespace App {
-		// interface Error {}
 		interface Locals {
 			session?: {
 				id: string; // jti
@@ -18,9 +17,8 @@ declare global {
 		interface PageData {
 			pageTitle: string;
 		}
+		// interface Error {}
 		// interface PageState {}
 		// interface Platform {}
 	}
 }
-
-export {};
