@@ -12,9 +12,9 @@ form.stacked {
 				@apply mt-1 block w-full;
 			}
 		}
-		&:has(> input:first-child:is([type='checkbox'], [type='radio']) + span:last-child) {
+		&:has(> input:is([type='checkbox'], [type='radio']):first-child + span) {
 			@apply flex items-center gap-x-2;
-			> :required + span {
+			> [type='checkbox']:required + span {
 				@apply after:text-red-800 after:content-['*'];
 			}
 		}
