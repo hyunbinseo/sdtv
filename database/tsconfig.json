@@ -1,0 +1,10 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": { "paths": {} },
+	"include": [
+		"./**/*.js",
+		"./**/*.ts",
+		"../src/lib/server/database/**/*.js",
+		"../src/lib/server/database/**/*.ts"
+	]
+}
