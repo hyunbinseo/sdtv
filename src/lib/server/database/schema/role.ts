@@ -1,4 +1,5 @@
 import { toReadonly } from '@hyunbinseo/tools';
+import { relations } from 'drizzle-orm';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { ulid } from 'ulid';
 import { userTable } from './user.ts';
@@ -19,3 +20,7 @@ export const roleTable = sqliteTable('role', {
 	revokedAt: integer({ mode: 'timestamp' }),
 	revokedBy: text().references(() => userTable.id)
 });
+
+export const roleRelations = relations(roleTable, ({ one }) => ({
+	user: one(userTable, { fields: [roleTable.userId], references: [userTable.id] })
+}));

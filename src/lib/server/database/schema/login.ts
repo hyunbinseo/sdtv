@@ -1,5 +1,6 @@
 import { generatePINString } from '@hyunbinseo/tools';
 import { randomUUID } from 'crypto';
+import { relations } from 'drizzle-orm';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { ulid } from 'ulid';
 import { ip } from '../columns.ts';
@@ -21,3 +22,7 @@ export const loginTable = sqliteTable('login', {
 	expiredAt: integer({ mode: 'timestamp' }),
 	ip
 });
+
+export const loginRelations = relations(loginTable, ({ one }) => ({
+	user: one(userTable, { fields: [loginTable.userId], references: [userTable.id] })
+}));
