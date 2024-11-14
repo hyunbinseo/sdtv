@@ -1,5 +1,5 @@
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
-import { userIp } from '../columns.ts';
+import { ip } from '../columns.ts';
 import { sessionTable } from './session.ts';
 import { userTable } from './user.ts';
 
@@ -10,6 +10,8 @@ export const sessionBanTable = sqliteTable('session_ban', {
 	bannedAt: integer({ mode: 'timestamp' })
 		.notNull()
 		.$default(() => new Date()),
-	bannedBy: text().references(() => userTable.id),
-	userIp
+	bannedBy: text()
+		.references(() => userTable.id)
+		.notNull(),
+	ip
 });

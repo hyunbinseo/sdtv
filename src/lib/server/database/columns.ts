@@ -1,6 +1,7 @@
 import { text } from 'drizzle-orm/sqlite-core';
 
-export const userIp = text({ length: 45 });
+// getClientAddress() always returns a string.
+export const ip = text({ length: 45 }).notNull();
 
 // SQLite `INTEGER PRIMARY KEY` columns should be used with caution.
 // Therefore, ULID based text primary keys are used in this template.

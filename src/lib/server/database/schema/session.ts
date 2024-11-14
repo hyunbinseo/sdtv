@@ -1,7 +1,7 @@
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { ulid } from 'ulid';
-import { userIp } from '../columns.ts';
-import { sessionExpiresIn } from '../config.js';
+import { ip } from '../columns.ts';
+import { sessionExpiresIn } from '../config.ts';
 import { loginTable } from './login.ts';
 import { userTable } from './user.ts';
 
@@ -17,5 +17,5 @@ export const sessionTable = sqliteTable('session', {
 	expiresAt: integer({ mode: 'timestamp' })
 		.notNull()
 		.$default(() => new Date(Date.now() + sessionExpiresIn)),
-	userIp
+	ip
 });

@@ -2,8 +2,8 @@ import { generatePINString } from '@hyunbinseo/tools';
 import { randomUUID } from 'crypto';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { ulid } from 'ulid';
-import { userIp } from '../columns.ts';
-import { loginExpiresIn, loginOtpLength } from '../config.js';
+import { ip } from '../columns.ts';
+import { loginExpiresIn, loginOtpLength } from '../config.ts';
 import { userTable } from './user.ts';
 
 export const loginTable = sqliteTable('login', {
@@ -19,5 +19,5 @@ export const loginTable = sqliteTable('login', {
 		.notNull()
 		.$default(() => new Date(Date.now() + loginExpiresIn)),
 	expiredAt: integer({ mode: 'timestamp' }),
-	userIp
+	ip
 });

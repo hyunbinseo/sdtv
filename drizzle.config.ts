@@ -7,7 +7,7 @@ if (!env.SQLITE_PATH) throw new TypeError('SQLITE_PATH is undefined');
 
 export default defineConfig({
 	dialect: 'sqlite',
-	schema: './src/lib/server/database/schema.js',
+	schema: './src/lib/server/database/schema.ts',
 	dbCredentials: { url: env.SQLITE_PATH },
 	casing: 'snake_case'
 });

@@ -2,7 +2,7 @@ import { dateToSafeISOString } from '@hyunbinseo/tools';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import { mkdirSync } from 'node:fs';
 import { env } from 'node:process';
-import * as schema from '../src/lib/server/database/schema.js';
+import * as schema from '../src/lib/server/database/schema.ts';
 
 if (!env.SQLITE_PATH) throw new TypeError('SQLITE_PATH is undefined');
 

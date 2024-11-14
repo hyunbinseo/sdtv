@@ -1,7 +1,7 @@
 import { dev } from '$app/environment';
 import { SQLITE_PATH } from '$env/static/private';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
-import * as schema from './schema.js';
+import * as schema from './schema.ts';
 
 // The `SQLITE_PATH` variable differs in `dev`, `build`, and `preview`,
 // because Vite imports different `.env` files according to the mode.

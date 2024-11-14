@@ -10,5 +10,5 @@ export const profileTable = sqliteTable('profile', {
 	createdAt: integer({ mode: 'timestamp' })
 		.notNull()
 		.$default(() => new Date()),
-	updatedAt: integer({ mode: 'timestamp' })
+	updatedAt: integer({ mode: 'timestamp' }).$onUpdate(() => new Date())
 });
