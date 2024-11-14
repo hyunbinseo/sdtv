@@ -7,11 +7,11 @@
 	const isDefinedReasonPhrase = (status: number): status is keyof typeof t.http => status in t.http;
 
 	const message = $derived(
-		$page?.error?.message && !isGenericErrorMessage($page.error.message)
-			? $page.error.message
-			: isDefinedReasonPhrase($page.status)
-				? t.http[$page.status]
-				: t['unknown-error']
+		(() => {
+			const message = $page?.error?.message;
+			if (message && !isGenericErrorMessage(message)) return message;
+			return isDefinedReasonPhrase($page.status) ? t.http[$page.status] : t['unknown-error'];
+		})()
 	);
 </script>
 

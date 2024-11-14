@@ -11,7 +11,7 @@
 /* User-Agent */
 @layer components {
 	.ua-anchor {
-		@apply cursor-pointer text-[#0000EE] underline visited:text-[#551A8B] active:text-[#FF0000];
+		@apply cursor-pointer text-blue-800 underline visited:text-violet-800 active:text-red-800;
 	}
 }
 
