@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { PUBLIC_APP_PATH } from '$env/static/public';
+	import { PUBLIC_PRIVATE_PATH } from '$env/static/public';
 	import Container from '$lib/components/Container.svelte';
 	import logo from '$lib/static/logo-horizontal.svg';
 	import { onMount } from 'svelte';
@@ -11,23 +11,23 @@
 	let session = $state(false);
 
 	onMount(async () => {
-		// TODO Check if session exists
-		// const response = await fetch(PUBLIC_APP_PATH);
-		// if (response.ok) session = true;
+		const response = await fetch(PUBLIC_PRIVATE_PATH);
+		if (response.ok) session = true;
 	});
 
-	const navItems = $derived(
-		new Map<`/${string}`, string>([
+	type NavHref = `/${string}`;
+
+	const navLinks = $derived(
+		new Map<NavHref, string>([
 			['/', t.nav.home],
 			['/about', t.nav.about],
-			!session ? ['/login', t.nav.login] : [PUBLIC_APP_PATH as `/${string}`, t.nav.app]
+			!session ? ['/login', t.nav.login] : [PUBLIC_PRIVATE_PATH as NavHref, t.nav.app]
 		])
 	);
 
-	// TODO Check if this can be modularized.
-	const isActive = (href: `/${string}`) =>
-		href === '/' //
-			? $page.url.pathname === href
+	const navLinkIsActive = (href: NavHref) =>
+		href === '/'
+			? $page.url.pathname === href //
 			: $page.url.pathname.startsWith(href);
 </script>
 
@@ -38,8 +38,9 @@
 			<div
 				class="ml-6 flex flex-1 gap-x-6 overflow-x-auto whitespace-nowrap pr-[--container-padding] last:*:ml-auto max-sm:hidden"
 			>
-				{#each navItems as [href, textContent] (href)}
-					<a {href} class:active={isActive(href)}>{textContent}</a>
+				{#each navLinks as [href, label] (href)}
+					{@const active = navLinkIsActive(href)}
+					<a {href} class:active>{label}</a>
 				{/each}
 			</div>
 		</nav>
@@ -47,8 +48,9 @@
 	{@render children()}
 	{#snippet bottomNav()}
 		<nav class="bottom flex h-14 shadow-top *:flex-1">
-			{#each navItems as [href, textContent] (href)}
-				<a {href} class:active={isActive(href)}>{textContent}</a>
+			{#each navLinks as [href, label] (href)}
+				{@const active = navLinkIsActive(href)}
+				<a {href} class:active>{label}</a>
 			{/each}
 		</nav>
 	{/snippet}
