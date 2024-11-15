@@ -15,12 +15,12 @@
 	use:enhance={createSubmitFunction({ formState: loginForm, updateOptions: { reset: false } })}
 	class="{formStyles.stacked} {formStyles.underline} mx-auto my-8 flex w-full max-w-80 flex-col md:my-16"
 >
-	{#if !data.magicLink || form?.error}
+	{#if !data.magicLinkLogin || form?.error}
 		{#if !form?.loginId}
 			<h1 class="text-2xl font-bold">
 				{form?.error
 					? t.error[form.error]
-					: data.magicLink === null
+					: data.magicLinkLogin === null
 						? t['magic-link-is-invalid']
 						: data.pageTitle}
 			</h1>
@@ -51,7 +51,9 @@
 					type="text"
 					inputmode="numeric"
 					pattern="\d+"
-					{...data.otpInputAttributes}
+					minlength={data.loginOtpLength}
+					maxlength={data.loginOtpLength}
+					placeholder={'123456789'.slice(0, data.loginOtpLength)}
 					required
 				/>
 			</label>
@@ -62,9 +64,9 @@
 		{/if}
 	{:else}
 		<p class="text-xl font-bold">{t['login-as']}</p>
-		<p class="mt-1">{data.magicLink.contact}</p>
-		<input type="hidden" name="id" value={data.magicLink.id} />
-		<input type="hidden" name="code" value={data.magicLink.code} />
+		<p class="mt-1">{data.magicLinkLogin.user.contact}</p>
+		<input type="hidden" name="id" value={data.magicLinkLogin.id} />
+		<input type="hidden" name="code" value={data.magicLinkLogin.code} />
 		<button formaction="?/magic" class="btn btn-primary mt-4 disabled:btn-spinner">
 			{t.continue}
 		</button>
