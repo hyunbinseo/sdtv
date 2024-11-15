@@ -1,5 +1,5 @@
 import { PUBLIC_PRIVATE_PATH } from '$env/static/public';
-import { authenticate, banCurrentSession } from '$lib/server/authenticate.ts';
+import { authenticate, banCurrentSessions } from '$lib/server/authenticate.ts';
 import { db } from '$lib/server/database/client.ts';
 import { profileTable } from '$lib/server/database/schema.ts';
 import { parseOrErrorPage } from '$lib/utilities.ts';
@@ -37,7 +37,7 @@ export const actions = {
 			.values({ userId, ...form })
 			.onConflictDoUpdate({ target: profileTable.userId, set: form });
 
-		await banCurrentSession(e, { all: true, delay: true });
+		await banCurrentSessions(e, { delay: true });
 		await authenticate(e, userId, null);
 	}
 };

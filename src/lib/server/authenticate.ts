@@ -5,8 +5,10 @@ import { base64ToUint8Array } from '$lib/utilities.ts';
 import { toReadonly } from '@hyunbinseo/tools';
 import { error, redirect, type RequestEvent } from '@sveltejs/kit';
 import { and, eq, gt, isNull, lt, ne, sql } from 'drizzle-orm';
+import { union } from 'drizzle-orm/sqlite-core';
 import { jwtVerify, SignJWT, type JWTPayload } from 'jose';
 import { db } from './database/client.ts';
+import { sessionBanDelay, sessionBanDelayInSeconds } from './database/config.ts';
 import {
 	roleTable,
 	sessionBanTable,
@@ -113,46 +115,62 @@ export const validateSession = async (e: RequestEvent) => {
 	}
 };
 
-export const banCurrentSession = async (
-	e: RequestEvent,
-	options?: Partial<{ all: true; delay: true }>
-) => {
+export const banCurrentSession = async (e: RequestEvent, options?: { delay: true }) => {
 	if (!e.locals.session) return;
-
-	const { id: sessionId, userId } = e.locals.session;
-	const ip = e.getClientAddress();
 
 	await db
 		.insert(sessionBanTable)
-		.values([
-			// Inserting this row can be done using the UNION set operation.
-			// Reference https://orm.drizzle.team/docs/set-operations#union
-			{
-				sessionId,
-				bannedAt: options?.delay ? new Date(Date.now() + 10 * 1000) : undefined,
-				bannedBy: userId,
-				ip
-			},
-			...(!options?.all
-				? []
-				: // `INSERT INTO table SELECT ...` is not supported yet.
-					// This could possibly become a prepared query with a CTE.
-					// Blocked by https://github.com/drizzle-team/drizzle-orm/issues/398
-					await db
-						.select({
-							sessionId: sessionTable.id,
-							bannedBy: sql<string>`${userId}`,
-							ip: sql<string>`${ip}`
-						})
-						.from(sessionTable)
-						.where(
-							and(
-								ne(sessionTable.id, sessionId),
-								eq(sessionTable.userId, userId),
-								gt(sessionTable.expiresAt, new Date())
-							)
-						))
-		])
+		.values({
+			sessionId: e.locals.session.id,
+			bannedAt: options?.delay ? new Date(Date.now() + sessionBanDelay) : undefined,
+			bannedBy: e.locals.session.userId,
+			ip: e.getClientAddress()
+		})
+		.onConflictDoNothing();
+
+	e.cookies.delete(SESSION_COOKIE_NAME, { path: '/' });
+	e.locals.session = undefined;
+};
+
+export const banCurrentSessions = async (e: RequestEvent, options?: { delay: true }) => {
+	if (!e.locals.session) return;
+
+	const { id: sessionId, userId } = e.locals.session;
+
+	const bannedAtDelayed = sql`strftime('%s', 'now') + ${sessionBanDelayInSeconds}`.as('banned_at');
+	const bannedAtNow = sql`strftime('%s', 'now')`.as('banned_at');
+	const bannedBy = sql`${userId}`.as('banned_by');
+	const ip = sql`${e.getClientAddress()}`.as('ip');
+
+	await db
+		.insert(sessionBanTable)
+		.select(
+			union(
+				db
+					.select({
+						sessionId: sql`${sessionId}`.as('session_id'),
+						bannedAt: options?.delay ? bannedAtDelayed : bannedAtNow,
+						bannedBy,
+						ip
+					})
+					.from(sessionTable),
+				db
+					.select({
+						sessionId: sessionTable.id,
+						bannedAt: bannedAtNow,
+						bannedBy,
+						ip
+					})
+					.from(sessionTable)
+					.where(
+						and(
+							ne(sessionTable.id, sessionId),
+							eq(sessionTable.userId, userId),
+							gt(sessionTable.expiresAt, new Date())
+						)
+					)
+			)
+		)
 		.onConflictDoNothing();
 
 	e.cookies.delete(SESSION_COOKIE_NAME, { path: '/' });
