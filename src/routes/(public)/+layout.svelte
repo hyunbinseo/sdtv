@@ -11,7 +11,7 @@
 	let session = $state(false);
 
 	onMount(async () => {
-		const response = await fetch(PUBLIC_PRIVATE_PATH);
+		const response = await fetch('/session');
 		if (response.ok) session = true;
 	});
 
