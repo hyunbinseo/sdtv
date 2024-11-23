@@ -31,30 +31,32 @@
 			: $page.url.pathname.startsWith(href);
 </script>
 
-<Container>
-	{#snippet topNav()}
-		<nav class="top flex h-[--top-navbar-height] shadow-bottom">
-			<img src={logo} alt={t.logo} class="my-auto ml-[--container-padding] h-1/2 max-sm:mx-auto" />
-			<div
-				class="ml-6 flex flex-1 gap-x-6 overflow-x-auto whitespace-nowrap pr-[--container-padding] last:*:ml-auto max-sm:hidden"
-			>
-				{#each navLinks as [href, label] (href)}
-					{@const active = navLinkIsActive(href)}
-					<a {href} class:active>{label}</a>
-				{/each}
-			</div>
-		</nav>
-	{/snippet}
+<Container {topNav} {bottomNav}>
 	{@render children()}
-	{#snippet bottomNav()}
-		<nav class="bottom flex h-14 shadow-top *:flex-1">
+</Container>
+
+{#snippet topNav()}
+	<nav class="top flex h-[--top-navbar-height] shadow-bottom">
+		<img src={logo} alt={t.logo} class="my-auto ml-[--container-padding] h-1/2 max-sm:mx-auto" />
+		<div
+			class="ml-6 flex flex-1 gap-x-6 overflow-x-auto whitespace-nowrap pr-[--container-padding] last:*:ml-auto max-sm:hidden"
+		>
 			{#each navLinks as [href, label] (href)}
 				{@const active = navLinkIsActive(href)}
 				<a {href} class:active>{label}</a>
 			{/each}
-		</nav>
-	{/snippet}
-</Container>
+		</div>
+	</nav>
+{/snippet}
+
+{#snippet bottomNav()}
+	<nav class="bottom flex h-14 shadow-top *:flex-1">
+		{#each navLinks as [href, label] (href)}
+			{@const active = navLinkIsActive(href)}
+			<a {href} class:active>{label}</a>
+		{/each}
+	</nav>
+{/snippet}
 
 <style lang="postcss">
 	nav {

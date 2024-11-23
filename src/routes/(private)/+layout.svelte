@@ -66,42 +66,42 @@
 	<meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 
-<Container>
-	{#snippet topNav()}
-		<nav class="top flex h-[--top-navbar-height] shadow-bottom">
-			<img src={logo} alt={t.logo} class="my-auto ml-[--container-padding] h-1/2" />
-			<div
-				class="ml-6 flex flex-1 gap-x-6 overflow-x-auto whitespace-nowrap pr-[--container-padding]"
-			>
-				<div class="contents max-sm:hidden" class:hidden={isOnboarding}>
-					{#each navLinks as [href, label] (href)}
-						{@const active = navLinkIsActive(href)}
-						<a {href} class:active>{label}</a>
-					{/each}
-				</div>
-				<form method="post" use:enhance class="contents first:*:ml-auto">
-					{#if !isOnboarding && data.session.isAdmin}
-						{@const href = '/admin'}
-						{@const active = navLinkIsActive(href)}
-						<a {href} class:active>{t.nav.admin}</a>
-					{/if}
-					<button formaction="/session/logout">
-						{t.nav.logout}
-					</button>
-				</form>
-			</div>
-		</nav>
-	{/snippet}
+<Container {topNav} {bottomNav}>
 	{@render children()}
-	{#snippet bottomNav()}
-		<nav class="bottom flex h-14 shadow-top *:flex-1" class:hidden={isOnboarding}>
-			{#each navLinks as [href, label] (href)}
-				{@const active = navLinkIsActive(href)}
-				<a {href} class:active>{label}</a>
-			{/each}
-		</nav>
-	{/snippet}
 </Container>
+
+{#snippet topNav()}
+	<nav class="top flex h-[--top-navbar-height] shadow-bottom">
+		<img src={logo} alt={t.logo} class="my-auto ml-[--container-padding] h-1/2" />
+		<div
+			class="ml-6 flex flex-1 gap-x-6 overflow-x-auto whitespace-nowrap pr-[--container-padding]"
+		>
+			<div class="contents max-sm:hidden" class:hidden={isOnboarding}>
+				{#each navLinks as [href, label] (href)}
+					{@const active = navLinkIsActive(href)}
+					<a {href} class:active>{label}</a>
+				{/each}
+			</div>
+			<form method="post" use:enhance class="contents first:*:ml-auto">
+				{#if !isOnboarding && data.session.isAdmin}
+					<a href="/admin">{t.nav.admin}</a>
+				{/if}
+				<button formaction="/session/logout">
+					{t.nav.logout}
+				</button>
+			</form>
+		</div>
+	</nav>
+{/snippet}
+
+{#snippet bottomNav()}
+	<nav class="bottom flex h-14 shadow-top *:flex-1" class:hidden={isOnboarding}>
+		{#each navLinks as [href, label] (href)}
+			{@const active = navLinkIsActive(href)}
+			<a {href} class:active>{label}</a>
+		{/each}
+	</nav>
+{/snippet}
 
 <style lang="postcss">
 	nav {
