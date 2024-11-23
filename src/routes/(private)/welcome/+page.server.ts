@@ -39,5 +39,6 @@ export const actions = {
 
 		await banCurrentSessions(e, { delay: true });
 		await authenticate(e, userId, null);
+		redirect(302, PUBLIC_PRIVATE_PATH);
 	}
 };

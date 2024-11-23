@@ -169,6 +169,7 @@ export const actions = {
 			return fail(400, { error: 'LOGIN_EXPIRED' as const });
 
 		await authenticate(e, magicLinkLogin.userId, magicLinkLogin.id);
+		redirect(302, PUBLIC_PRIVATE_PATH);
 	},
 	otp: async (e) => {
 		if (e.locals.session) redirect(302, PUBLIC_PRIVATE_PATH);
@@ -201,5 +202,6 @@ export const actions = {
 		if (otpLogin.expiresAt < new Date()) return fail(400, { error: 'LOGIN_EXPIRED' as const });
 
 		await authenticate(e, otpLogin.userId, otpLogin.id);
+		redirect(302, PUBLIC_PRIVATE_PATH);
 	}
 };

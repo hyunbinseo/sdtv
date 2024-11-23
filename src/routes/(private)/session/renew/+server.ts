@@ -11,4 +11,5 @@ export const POST = async (e) => {
 
 	await banCurrentSession(e, { delay: true });
 	await authenticate(e, userId, null);
+	return new Response();
 };

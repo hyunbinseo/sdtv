@@ -1,9 +1,8 @@
 import { dev } from '$app/environment';
 import { JWT_SECRET, SESSION_COOKIE_NAME } from '$env/static/private';
-import { PUBLIC_PRIVATE_PATH } from '$env/static/public';
 import { base64ToUint8Array } from '$lib/utilities.ts';
 import { toReadonly } from '@hyunbinseo/tools';
-import { error, redirect, type RequestEvent } from '@sveltejs/kit';
+import { error, type RequestEvent } from '@sveltejs/kit';
 import { and, eq, gt, isNull, lt, ne, sql } from 'drizzle-orm';
 import { union } from 'drizzle-orm/sqlite-core';
 import { jwtVerify, SignJWT, type JWTPayload } from 'jose';
@@ -73,8 +72,6 @@ export const authenticate = async (e: RequestEvent, userId: string, loginId: str
 
 	const { payload } = await jwtVerify<Payload>(jwt, jwtSecret);
 	e.locals.session = payloadToSession(payload);
-
-	redirect(302, PUBLIC_PRIVATE_PATH);
 };
 
 const payloadToSession = (payload: Payload): NonNullable<App.Locals['session']> => {
