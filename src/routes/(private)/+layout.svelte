@@ -1,12 +1,51 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { invalidate } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { PUBLIC_ONBOARD_PATH, PUBLIC_PRIVATE_PATH } from '$env/static/public';
 	import Container from '$lib/components/Container.svelte';
 	import logo from '$lib/static/logo-horizontal.svg';
+	import { onMount } from 'svelte';
+	import { digits, literal, minValue, nullable, pipe, safeParse, string, transform } from 'valibot';
 	import { t } from './i18n.layout.ts';
 
 	let { data, children } = $props();
+
+	$effect(() => {
+		localStorage.setItem('sessionExpiresAt', data.session.expiresAt.toString());
+	});
+
+	onMount(() => {
+		const renewalIntervalId = window.setInterval(async () => {
+			const parsedExpiresAt = safeParse(
+				pipe(string(), digits(), transform(Number), literal(data.session.expiresAt)),
+				localStorage.getItem('sessionExpiresAt')
+			);
+
+			if (!parsedExpiresAt.success) return invalidate('private:session');
+			if (parsedExpiresAt.output - Date.now() > data.session.renewalThreshold) return;
+
+			const parsedRenewalStart = safeParse(
+				nullable(pipe(string(), digits(), transform(Number), minValue(Date.now() - 60 * 1000))),
+				localStorage.getItem('sessionRenewalStart')
+			);
+
+			if (!parsedRenewalStart.success) return localStorage.removeItem('sessionRenewalStart');
+			if (parsedRenewalStart.output) return;
+
+			try {
+				localStorage.setItem('sessionRenewalStart', Date.now().toString());
+				await fetch('/session/renew', { method: 'POST' });
+			} finally {
+				localStorage.removeItem('sessionRenewalStart');
+				await invalidate('private:session');
+			}
+		}, 60 * 1000);
+
+		return () => {
+			window.clearInterval(renewalIntervalId);
+		};
+	});
 
 	type NavHref = `/${string}`;
 
