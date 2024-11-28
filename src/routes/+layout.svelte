@@ -4,8 +4,8 @@
 	import logo from '$lib/static/logo.svg';
 	import '../app.css';
 
-	// TODO Opt-out of SVG favicon inlining.
-	// Reference https://github.com/vitejs/vite/pull/15454
+	// TODO Upgrade to Vite@6 and block favicon inlining.
+	// import logo from '$lib/static/logo.svg?no-inline';
 
 	// SVG favicons are not supported by Safari 18.
 	// Reference https://caniuse.com/link-icon-svg
