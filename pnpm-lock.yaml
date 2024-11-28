@@ -85,8 +85,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0(svelte@5.2.10)(typescript@5.7.2)
       svelte-form-enhanced:
-        specifier: ^0.1.0
-        version: 0.1.0(@sveltejs/kit@2.8.5(@sveltejs/vite-plugin-svelte@4.0.2(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1)))(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1)))(svelte@5.2.10)
+        specifier: ^0.2.0
+        version: 0.2.0(@sveltejs/kit@2.8.5(@sveltejs/vite-plugin-svelte@4.0.2(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1)))(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1)))(svelte@5.2.10)
       tailwindcss:
         specifier: ^3.4.15
         version: 3.4.15
@@ -1901,11 +1901,11 @@ packages:
       svelte:
         optional: true
 
-  svelte-form-enhanced@0.1.0:
-    resolution: {integrity: sha512-BIVbQ5Ce2/lEzmJZxyzyTRsE0csGCPBa8hl78w8IUeTYFVJK4XCNEW2S1MKK3CUoLiaV/pzyEV9NMy+1lh5yqA==}
+  svelte-form-enhanced@0.2.0:
+    resolution: {integrity: sha512-Awz9zYRZl83EcM/PqyRCLWzH0vS1dpaFPPi0TO75mYh/BvveP6IqH/qlwvfN9HCz0s1Qm5NX3JmntrNq6/FnIQ==}
     peerDependencies:
       '@sveltejs/kit': ^2.5.24
-      svelte: ^5.0.0-next.1
+      svelte: ^5.0.2
 
   svelte@5.2.10:
     resolution: {integrity: sha512-ON0OyO7vOmSjTc9mLjusu3vf1I7BvjovbiRB7j84F1WZMXV6dR+Tj4btIzxQxMHfzbGskaFmRa7qjgmBSVBnhQ==}
@@ -3552,7 +3552,7 @@ snapshots:
     optionalDependencies:
       svelte: 5.2.10
 
-  svelte-form-enhanced@0.1.0(@sveltejs/kit@2.8.5(@sveltejs/vite-plugin-svelte@4.0.2(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1)))(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1)))(svelte@5.2.10):
+  svelte-form-enhanced@0.2.0(@sveltejs/kit@2.8.5(@sveltejs/vite-plugin-svelte@4.0.2(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1)))(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1)))(svelte@5.2.10):
     dependencies:
       '@sveltejs/kit': 2.8.5(@sveltejs/vite-plugin-svelte@4.0.2(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1)))(svelte@5.2.10)(vite@5.4.11(@types/node@22.10.1))
       svelte: 5.2.10

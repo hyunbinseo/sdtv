@@ -1,13 +1,15 @@
 <script>
 	import { enhance } from '$app/forms';
 	import formStyles from '$lib/styles/form.module.css';
-	import { createSubmitFunction } from 'svelte-form-enhanced';
+	import { createFormHelper } from 'svelte-form-enhanced';
 	import { t } from './i18n.ts';
+
+	const f = createFormHelper();
 </script>
 
 <form
 	method="post"
-	use:enhance={createSubmitFunction()}
+	use:enhance={f.submitFunction}
 	class="{formStyles.stacked} {formStyles.underline} mx-auto my-8 flex w-full max-w-80 flex-col md:my-16"
 >
 	<h1 class="text-2xl font-bold">{t.welcome}</h1>
@@ -20,5 +22,7 @@
 		<span>{t.surname}</span>
 		<input type="text" name="surname" placeholder={t.doe} pattern="\S.*" required />
 	</label>
-	<button class="btn btn-primary mt-10 disabled:btn-spinner">{t['get-started']}</button>
+	<button disabled={f.state === 'submitting'} class="btn btn-primary mt-10 disabled:btn-spinner">
+		{t['get-started']}
+	</button>
 </form>

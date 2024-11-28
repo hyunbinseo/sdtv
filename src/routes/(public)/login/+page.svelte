@@ -1,24 +1,24 @@
 <script>
 	import { enhance } from '$app/forms';
 	import formStyles from '$lib/styles/form.module.css';
-	import { createFormState, createSubmitFunction } from 'svelte-form-enhanced';
+	import { createFormHelper } from 'svelte-form-enhanced';
 	import { slide } from 'svelte/transition';
 	import { t } from './i18n.ts';
 
 	let { data, form } = $props();
 
-	const loginForm = createFormState();
+	const f = createFormHelper({ updateOptions: { reset: false } });
 </script>
 
 <form
 	method="post"
-	use:enhance={createSubmitFunction({ formState: loginForm, updateOptions: { reset: false } })}
+	use:enhance={f.submitFunction}
 	class="{formStyles.stacked} {formStyles.underline} mx-auto my-8 flex w-full max-w-80 flex-col md:my-16"
 >
 	{#if !data.magicLinkLogin || form?.error}
 		{#if !form?.loginId}
 			<h1 class="text-2xl font-bold">
-				{form?.error
+				{form?.error && form.error !== 'MAGIC_LINK_SEND_FAILED'
 					? t.error[form.error]
 					: data.magicLinkLogin === null
 						? t['magic-link-is-invalid']
@@ -31,10 +31,14 @@
 				<!-- e.g. input type, placeholder, email validation -->
 				<input name="contact" type="email" placeholder="username@example.com" required />
 			</label>
-			{#if form?.error === 'MAGIC_LINK_SEND_FAILED' && !loginForm.isSubmitting}
+			{#if form?.error === 'MAGIC_LINK_SEND_FAILED' && f.state !== 'submitting'}
 				<p transition:slide class="mt-2 text-red-800 text-smallish">{t.error[form.error]}</p>
 			{/if}
-			<button formaction="?/send" class="btn btn-primary mt-4 disabled:btn-spinner">
+			<button
+				formaction="?/send"
+				disabled={f.state === 'submitting'}
+				class="btn btn-primary mt-4 disabled:btn-spinner"
+			>
 				{t['send-magic-link']}
 			</button>
 		{:else}
@@ -58,7 +62,11 @@
 				/>
 			</label>
 			<input type="hidden" name="id" value={form.loginId} />
-			<button formaction="?/otp" class="btn btn-primary mt-4 disabled:btn-spinner">
+			<button
+				formaction="?/otp"
+				disabled={f.state === 'submitting'}
+				class="btn btn-primary mt-4 disabled:btn-spinner"
+			>
 				{t.login}
 			</button>
 		{/if}
@@ -67,7 +75,11 @@
 		<p class="mt-1">{data.magicLinkLogin.user.contact}</p>
 		<input type="hidden" name="id" value={data.magicLinkLogin.id} />
 		<input type="hidden" name="code" value={data.magicLinkLogin.code} />
-		<button formaction="?/magic" class="btn btn-primary mt-4 disabled:btn-spinner">
+		<button
+			formaction="?/magic"
+			disabled={f.state === 'submitting'}
+			class="btn btn-primary mt-4 disabled:btn-spinner"
+		>
 			{t.continue}
 		</button>
 		<a href="?" class="btn btn-secondary mt-2">{t['start-over']}</a>
