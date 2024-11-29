@@ -8,6 +8,13 @@
 /* Reference https://github.com/tailwindlabs/tailwindcss/discussions/11012 */
 /* Reference https://github.com/tailwindlabs/tailwindcss-intellisense/issues/227 */
 
+@layer base {
+	th,
+	td {
+		@apply whitespace-nowrap px-5 py-2.5 text-smallish coarse:py-3 sm:px-6;
+	}
+}
+
 /* User-Agent */
 @layer components {
 	.ua-anchor {
