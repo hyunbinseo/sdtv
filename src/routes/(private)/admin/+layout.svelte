@@ -27,7 +27,7 @@
 <header
 	class="relative z-10 -m-[--container-padding] mb-0 border-t-[1px] bg-white px-[--container-padding] pt-16"
 >
-	<h1 class="text-3xl font-bold">{t.title}</h1>
+	<h1 class="text-2xl font-bold">{t.title}</h1>
 </header>
 
 <nav

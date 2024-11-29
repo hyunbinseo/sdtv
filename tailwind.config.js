@@ -56,8 +56,6 @@ export default {
 					'line-height': '1.375rem' // 22px
 				}
 			});
-			// Reference https://developer.mozilla.org/en-US/docs/Web/CSS/@media/pointer
-			addVariant('coarse', '@media (pointer: coarse)'); // e.g. finger on a touchscreen
 			// Reference https://github.com/tailwindlabs/tailwindcss/pull/12370
 			addVariant('user-valid', '&:user-valid');
 			addVariant('user-invalid', '&:user-invalid');
