@@ -47,19 +47,35 @@
 		};
 	});
 
+	const isAdminPage = $derived($page.url.pathname.startsWith('/admin'));
+	const isOnboarding = $derived($page.url.pathname === PUBLIC_ONBOARD_PATH);
+
 	type NavHref = `/${string}`;
 
 	const navLinks = $derived(
-		new Map<NavHref, string>([
-			[PUBLIC_PRIVATE_PATH as NavHref, t.nav.home],
-			['/lorem', 'Lorem'],
-			['/ipsum', 'Ipsum']
-		])
+		new Map<NavHref, string>(
+			isOnboarding
+				? []
+				: !isAdminPage
+					? [
+							[PUBLIC_PRIVATE_PATH as NavHref, t.nav.home],
+							['/lorem', 'Lorem'],
+							['/ipsum', 'Ipsum']
+						]
+					: !data.session.isSuperuser
+						? []
+						: [
+								['/admin/', t.nav.dashboard],
+								['/admin/users', t.nav.users],
+								['/admin/roles', t.nav.roles]
+							]
+		)
 	);
 
-	const navLinkIsActive = (href: NavHref) => $page.url.pathname.startsWith(href);
-
-	const isOnboarding = $derived($page.url.pathname === PUBLIC_ONBOARD_PATH);
+	const navLinkIsActive = (href: NavHref) =>
+		href.endsWith('/')
+			? $page.url.pathname === href.slice(0, -1)
+			: $page.url.pathname.startsWith(href);
 </script>
 
 <svelte:head>
@@ -76,7 +92,7 @@
 		<div
 			class="ml-6 flex flex-1 gap-x-6 overflow-x-auto whitespace-nowrap pr-[--container-padding]"
 		>
-			<div class="contents max-sm:hidden" class:hidden={isOnboarding}>
+			<div class="contents max-sm:hidden">
 				{#each navLinks as [href, label] (href)}
 					{@const active = navLinkIsActive(href)}
 					<a {href} class:active>{label}</a>
@@ -84,23 +100,25 @@
 			</div>
 			<form method="post" use:enhance class="contents first:*:ml-auto">
 				{#if !isOnboarding && data.session.isAdmin}
-					<a href="/admin">{t.nav.admin}</a>
+					{@const href = !isAdminPage ? '/admin' : PUBLIC_PRIVATE_PATH}
+					{@const text = !isAdminPage ? t.nav.admin : t.nav.home}
+					<a {href}>{text}</a>
 				{/if}
-				<button formaction="/session/logout">
-					{t.nav.logout}
-				</button>
+				<button formaction="/session/logout">{t.nav.logout}</button>
 			</form>
 		</div>
 	</nav>
 {/snippet}
 
 {#snippet bottomNav()}
-	<nav class="bottom flex h-14 shadow-top *:flex-1" class:hidden={isOnboarding}>
-		{#each navLinks as [href, label] (href)}
-			{@const active = navLinkIsActive(href)}
-			<a {href} class:active>{label}</a>
-		{/each}
-	</nav>
+	{#if navLinks.size}
+		<nav class="bottom flex h-14 shadow-top *:flex-1">
+			{#each navLinks as [href, label] (href)}
+				{@const active = navLinkIsActive(href)}
+				<a {href} class:active>{label}</a>
+			{/each}
+		</nav>
+	{/if}
 {/snippet}
 
 <style lang="postcss">
