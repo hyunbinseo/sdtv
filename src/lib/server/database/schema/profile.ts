@@ -1,5 +1,6 @@
 import { relations } from 'drizzle-orm';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { sqlUnixEpoch } from '../sql.ts';
 import { userTable } from './user.ts';
 
 export const profileTable = sqliteTable('profile', {
@@ -8,9 +9,7 @@ export const profileTable = sqliteTable('profile', {
 		.references(() => userTable.id),
 	surname: text().notNull(),
 	givenName: text().notNull(),
-	createdAt: integer({ mode: 'timestamp' })
-		.notNull()
-		.$default(() => new Date()),
+	createdAt: integer({ mode: 'timestamp' }).notNull().default(sqlUnixEpoch),
 	updatedAt: integer({ mode: 'timestamp' }).$onUpdate(() => new Date())
 });
 
