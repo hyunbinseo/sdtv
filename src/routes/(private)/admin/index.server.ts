@@ -9,15 +9,13 @@ export const banUserSessions = async (e: RequestEvent, userIds: string[]) => {
 
 	await db
 		.insert(sessionBanTable)
-		.values(
-			// `INSERT INTO table SELECT ...` is not supported yet.
-			// This could possibly become a prepared query with a CTE.
-			// Blocked by https://github.com/drizzle-team/drizzle-orm/issues/398
-			await db
+		.select(
+			db
 				.select({
 					sessionId: sessionTable.id,
-					bannedBy: sql<string>`${e.locals.session.userId}`,
-					ip: sql<string>`${e.getClientAddress()}`
+					bannedAt: sql`strftime('%s', 'now')`.as('banned_at'),
+					bannedBy: sql`${e.locals.session.userId}`.as('banned_by'),
+					ip: sql`${e.getClientAddress()}`.as('ip')
 				})
 				.from(sessionTable)
 				.where(

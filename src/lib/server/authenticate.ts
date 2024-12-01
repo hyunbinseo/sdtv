@@ -132,11 +132,9 @@ export const banCurrentSession = async (e: RequestEvent, options?: { delay: true
 export const banCurrentSessions = async (e: RequestEvent, options?: { delay: true }) => {
 	if (!e.locals.session) return;
 
-	const { id: sessionId, userId } = e.locals.session;
-
 	const bannedAtDelayed = sql`strftime('%s', 'now') + ${sessionBanDelayInSeconds}`.as('banned_at');
 	const bannedAtNow = sql`strftime('%s', 'now')`.as('banned_at');
-	const bannedBy = sql`${userId}`.as('banned_by');
+	const bannedBy = sql`${e.locals.session.userId}`.as('banned_by');
 	const ip = sql`${e.getClientAddress()}`.as('ip');
 
 	await db
@@ -145,7 +143,7 @@ export const banCurrentSessions = async (e: RequestEvent, options?: { delay: tru
 			union(
 				db
 					.select({
-						sessionId: sql`${sessionId}`.as('session_id'),
+						sessionId: sql`${e.locals.session.id}`.as('session_id'),
 						bannedAt: options?.delay ? bannedAtDelayed : bannedAtNow,
 						bannedBy,
 						ip
@@ -161,8 +159,8 @@ export const banCurrentSessions = async (e: RequestEvent, options?: { delay: tru
 					.from(sessionTable)
 					.where(
 						and(
-							ne(sessionTable.id, sessionId),
-							eq(sessionTable.userId, userId),
+							ne(sessionTable.id, e.locals.session.id),
+							eq(sessionTable.userId, e.locals.session.userId),
 							gt(sessionTable.expiresAt, new Date())
 						)
 					)
