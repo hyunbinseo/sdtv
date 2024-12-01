@@ -26,7 +26,7 @@
 			data-sveltekit-reload>{t['skip-to-content']}</a
 		>
 		<!-- `z-index` keeps the `position: relative` children from scrolling above. -->
-		<div class="z-10 bg-white/75 backdrop-blur sm:sticky sm:top-0" class:max-sm:sticky={!bottomNav}>
+		<div class="sticky top-0 z-10 bg-white/75 backdrop-blur">
 			{@render topNav?.()}
 		</div>
 		<div id="main-content" class="flex-1 p-[--container-padding]">

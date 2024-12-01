@@ -39,7 +39,7 @@
 	</nav>
 	{#if data.users.length}
 		<div
-			class="mt-[--container-padding] overflow-x-auto border-y-[1px] border-gray-200 max-sm:-mx-[--container-padding] sm:rounded sm:border-[1px]"
+			class="-mx-[--container-padding] mt-[--container-padding] overflow-x-auto border-y-[1px] border-gray-200 sm:mx-0 sm:rounded sm:border-[1px]"
 		>
 			<table class="divide-y divide-gray-300">
 				<thead>

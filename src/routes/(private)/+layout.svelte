@@ -92,7 +92,7 @@
 		<div
 			class="ml-6 flex flex-1 gap-x-6 overflow-x-auto whitespace-nowrap pr-[--container-padding]"
 		>
-			<div class="contents max-sm:hidden">
+			<div class="hidden sm:contents">
 				{#each navLinks as [href, label] (href)}
 					{@const active = navLinkIsActive(href)}
 					<a {href} class:active>{label}</a>

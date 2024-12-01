@@ -37,7 +37,7 @@
 
 {#snippet topNav()}
 	<nav class="top flex h-[--top-navbar-height] shadow-bottom">
-		<img src={logo} alt={t.logo} class="my-auto ml-[--container-padding] h-1/2 max-sm:mx-auto" />
+		<img src={logo} alt={t.logo} class="m-auto h-1/2 sm:ml-[--container-padding] sm:mr-0" />
 		<div
 			class="ml-6 flex flex-1 gap-x-6 overflow-x-auto whitespace-nowrap pr-[--container-padding] last:*:ml-auto max-sm:hidden"
 		>
