@@ -19,7 +19,7 @@
 				href={showActive ? '?deactivated' : '?'}
 				role="switch"
 				aria-checked={showActive}
-				class="btn btn-xs btn-secondary flex items-center gap-x-1.5 sm:ml-auto"
+				class="btn btn-xs btn-secondary flex items-center gap-x-1.5"
 			>
 				<span class="tw-checkbox" class:tw-checkbox-checked={showActive}></span>
 				{t['active-users']}

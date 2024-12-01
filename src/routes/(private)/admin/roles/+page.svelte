@@ -9,20 +9,23 @@
 
 	let { data, form } = $props();
 
-	$effect(() => {
-		if (form?.userId && f.state === 'standby') form = null;
-	});
+	const fToggle = createFormHelper();
+	const fModal = createFormHelper({ updateOptions: { reset: false } });
 
 	let isOpen = $state(false);
-	const f = createFormHelper({ updateOptions: { reset: false } });
-	const f2 = createFormHelper();
+	const open = () => {
+		// The `form` prop should not be updated on the close event
+		// to avoid content changes during the closing transition.
+		if (form?.userId) form = null;
+		isOpen = true;
+	};
 </script>
 
 <div class="modal-wrapper">
-	<Modal bind:isOpen closeOnBackdropClick={f.state !== 'submitting'}>
+	<Modal bind:isOpen closeOnBackdropClick={fModal.state !== 'submitting'}>
 		<form
 			method="post"
-			use:enhance={f.submitFunction}
+			use:enhance={fModal.submitFunction}
 			class="{formStyles.stacked} {formStyles.underline} flex flex-col"
 		>
 			{#if !form || form.users?.length === 0}
@@ -31,26 +34,23 @@
 					<span>{t['given-name']}</span>
 					<input type="text" name="given-name" placeholder={t.john} pattern="\S.*" required />
 				</label>
-				{#if form?.users?.length === 0 && f.state !== 'submitting'}
+				{#if form?.users?.length === 0 && fModal.state !== 'submitting'}
 					<p transition:slide class="mt-2 text-red-800 text-smallish">
 						{t['no-search-results']}
 					</p>
 				{/if}
 				<button
 					formaction="?/search"
-					disabled={f.state === 'submitting'}
+					disabled={fModal.state === 'submitting'}
 					class="btn btn-primary mt-4 disabled:btn-spinner"
 				>
 					{t.search}
 				</button>
-			{:else if form.users}
+			{:else if form.users?.length}
 				<h1 class="text-xl font-bold">{t['assign-new-role']}</h1>
 				<label class="mt-4">
 					<span>{t.user}</span>
 					<select name="user-id" class="truncate" required>
-						{#if form.users.length > 1}
-							<option value="">---</option>
-						{/if}
 						{#each form.users as user (user.id)}
 							<option value={user.id}>
 								{user.profile.givenName}
@@ -73,14 +73,14 @@
 					</button>
 					<button
 						formaction="?/assign"
-						disabled={f.state === 'submitting'}
+						disabled={fModal.state === 'submitting'}
 						class="btn btn-primary flex-1 disabled:btn-spinner"
 					>
 						{t['assign-role']}
 					</button>
 				</nav>
 			{:else if form.userId}
-				<h1 class="text-xl font-bold">{t['assigned-role']}</h1>
+				<h1 class="text-xl font-bold">{t['role-has-been-assigned']}</h1>
 				<nav class="mt-4 flex gap-x-4">
 					<button type="button" onclick={() => (form = null)} class="btn btn-secondary">
 						{t['start-over']}
@@ -99,44 +99,43 @@
 	</Modal>
 </div>
 
-<form method="post" use:enhance={f2.submitFunction}>
-	<nav
-		class="-mx-[--container-padding] flex gap-x-3 overflow-x-auto whitespace-nowrap px-[--container-padding]"
-	>
-		<button type="button" onclick={() => (isOpen = true)} class="btn btn-xs btn-secondary">
+<!-- TODO Debounce invalidation function calls. -->
+<!-- TODO Fix checkbox spinner not being shown. -->
+<form method="post" use:enhance={fToggle.submitFunction}>
+	<nav>
+		<button type="button" onclick={open} class="btn btn-xs btn-secondary">
 			{t['assign-new-role']}
 		</button>
 	</nav>
-	<p class:hidden={data.users.length} class="mt-6">{t['no-data-to-show']}</p>
-	<div class:hidden={!data.users.length} class="-mx-[--container-padding] mt-4 overflow-x-auto">
-		<table class="min-w-full">
-			<thead>
-				<tr>
-					<th class="text-left">{t.name}</th>
-					<th class="text-left">{t.contact}</th>
-					<th>{t.admin}</th>
-					<th>{t.superuser}</th>
-				</tr>
-			</thead>
-			<tbody class="border-t-[1px] border-gray-200 odd:*:bg-gray-100 target:*:bg-yellow-50">
-				{#each data.users as user (user.id)}
-					<tr id={user.id}>
-						{#if user.profile}
+	{#if data.users.length}
+		<div
+			class="-mx-[--container-padding] mt-[--container-padding] overflow-x-auto border-y-[1px] border-gray-200 sm:mx-0 sm:rounded sm:border-[1px]"
+		>
+			<table class="divide-y divide-gray-300">
+				<thead>
+					<tr>
+						<th class="text-left">{t.name}</th>
+						<th class="w-full text-left">{t.contact}</th>
+						<th>{t.admin}</th>
+						<th>{t.superuser}</th>
+					</tr>
+				</thead>
+				<tbody class="divide-y divide-gray-200 target:*:bg-yellow-50 hover:*:bg-gray-50">
+					{#each data.users as user (user.id)}
+						<tr id={user.id}>
 							<td>
 								{user.profile.givenName}
 								{user.profile.surname}
 							</td>
-						{:else}
-							<td></td>
-						{/if}
-						<td>{user.contact}</td>
-						<td><Toggle {user} role="admin"></Toggle></td>
-						<td><Toggle {user} role="superuser"></Toggle></td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</div>
+							<td>{user.contact}</td>
+							<td><Toggle {user} role="admin"></Toggle></td>
+							<td><Toggle {user} role="superuser"></Toggle></td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</div>
+	{/if}
 </form>
 
 <style lang="postcss">
