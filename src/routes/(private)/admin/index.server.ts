@@ -4,18 +4,21 @@ import { sqlUnixEpoch } from '$lib/server/database/sql.ts';
 import { type RequestEvent } from '@sveltejs/kit';
 import { and, gt, inArray, sql } from 'drizzle-orm';
 
-export const banUserSessions = async (e: RequestEvent, userIds: string[]) => {
-	if (!e.locals.session?.roles.has('superuser')) return;
-	if (userIds.includes(e.locals.session.userId)) return;
+type Session = NonNullable<App.Locals['session']>;
 
-	await db
+// Convert this into a prepared statement.
+// Remove aliases in the `INSERT INTO table SELECT ...;` statement.
+// Blocked by https://github.com/drizzle-team/drizzle-orm/issues/3656
+
+export const banUserSessions = (e: RequestEvent, session: Session, userIds: string[]) =>
+	db
 		.insert(sessionBanTable)
 		.select(
 			db
 				.select({
 					sessionId: sessionTable.id,
 					bannedAt: sqlUnixEpoch.as('banned_at'),
-					bannedBy: sql`${e.locals.session.userId}`.as('banned_by'),
+					bannedBy: sql`${session.userId}`.as('banned_by'),
 					ip: sql`${e.getClientAddress()}`.as('ip')
 				})
 				.from(sessionTable)
@@ -27,4 +30,3 @@ export const banUserSessions = async (e: RequestEvent, userIds: string[]) => {
 				)
 		)
 		.onConflictDoNothing();
-};

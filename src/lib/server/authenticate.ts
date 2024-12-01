@@ -113,15 +113,19 @@ export const validateSession = async (e: RequestEvent) => {
 	}
 };
 
-export const banCurrentSession = async (e: RequestEvent, options?: { delay: true }) => {
-	if (!e.locals.session) return;
+type Session = NonNullable<App.Locals['session']>;
 
+export const banCurrentSession = async (
+	e: RequestEvent,
+	session: Session,
+	options?: { delay: true }
+) => {
 	await db
 		.insert(sessionBanTable)
 		.values({
-			sessionId: e.locals.session.id,
+			sessionId: session.id,
 			bannedAt: options?.delay ? new Date(Date.now() + sessionBanDelay) : undefined,
-			bannedBy: e.locals.session.userId,
+			bannedBy: session.userId,
 			ip: e.getClientAddress()
 		})
 		.onConflictDoNothing();
@@ -130,12 +134,18 @@ export const banCurrentSession = async (e: RequestEvent, options?: { delay: true
 	e.locals.session = undefined;
 };
 
-export const banCurrentSessions = async (e: RequestEvent, options?: { delay: true }) => {
-	if (!e.locals.session) return;
+// Convert these into a prepared statements.
+// Remove aliases in the `INSERT INTO table SELECT ...;` statement.
+// Blocked by https://github.com/drizzle-team/drizzle-orm/issues/3656
 
+export const banCurrentSessions = async (
+	e: RequestEvent,
+	session: Session,
+	options?: { delay: true }
+) => {
 	const bannedAtDelayed = sql`${sqlUnixEpoch} + ${sessionBanDelayInSeconds}`.as('banned_at');
 	const bannedAtNow = sqlUnixEpoch.as('banned_at');
-	const bannedBy = sql`${e.locals.session.userId}`.as('banned_by');
+	const bannedBy = sql`${session.userId}`.as('banned_by');
 	const ip = sql`${e.getClientAddress()}`.as('ip');
 
 	await db
@@ -144,7 +154,7 @@ export const banCurrentSessions = async (e: RequestEvent, options?: { delay: tru
 			union(
 				db
 					.select({
-						sessionId: sql`${e.locals.session.id}`.as('session_id'),
+						sessionId: sql`${session.id}`.as('session_id'),
 						bannedAt: options?.delay ? bannedAtDelayed : bannedAtNow,
 						bannedBy,
 						ip
@@ -160,8 +170,8 @@ export const banCurrentSessions = async (e: RequestEvent, options?: { delay: tru
 					.from(sessionTable)
 					.where(
 						and(
-							ne(sessionTable.id, e.locals.session.id),
-							eq(sessionTable.userId, e.locals.session.userId),
+							ne(sessionTable.id, session.id),
+							eq(sessionTable.userId, session.userId),
 							gt(sessionTable.expiresAt, new Date())
 						)
 					)

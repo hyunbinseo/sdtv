@@ -37,7 +37,7 @@ export const actions = {
 			.values({ userId, ...form })
 			.onConflictDoUpdate({ target: profileTable.userId, set: form });
 
-		await banCurrentSessions(e, { delay: true });
+		await banCurrentSessions(e, e.locals.session, { delay: true });
 		await authenticate(e, userId, null);
 		redirect(302, PUBLIC_PRIVATE_PATH);
 	}

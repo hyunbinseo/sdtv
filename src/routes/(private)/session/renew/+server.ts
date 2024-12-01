@@ -9,7 +9,7 @@ export const POST = async (e) => {
 
 	const { userId } = e.locals.session;
 
-	await banCurrentSession(e, { delay: true });
+	await banCurrentSession(e, e.locals.session, { delay: true });
 	await authenticate(e, userId, null);
 	return new Response();
 };

@@ -66,6 +66,6 @@ export const actions = {
 				)
 			);
 
-		await banUserSessions(e, userIds);
+		await banUserSessions(e, e.locals.session, userIds);
 	}
 };

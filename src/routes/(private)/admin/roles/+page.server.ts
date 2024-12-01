@@ -104,7 +104,7 @@ export const actions = {
 			.insert(roleTable)
 			.values({ userId, role, assignedBy: e.locals.session.userId });
 
-		await banUserSessions(e, [userId]);
+		await banUserSessions(e, e.locals.session, [userId]);
 
 		if (isNewUser) return { userId };
 	},
@@ -134,6 +134,6 @@ export const actions = {
 				)
 			);
 
-		await banUserSessions(e, [userId]);
+		await banUserSessions(e, e.locals.session, [userId]);
 	}
 };
