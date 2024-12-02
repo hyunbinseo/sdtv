@@ -1,17 +1,16 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { invalidate } from '$app/navigation';
+	import type { Role } from '$lib/server/database/schema.ts';
 	import formStyles from '$lib/styles/form.module.css';
 	import { createFormHelper } from 'svelte-form-enhanced';
 	import { Modal } from 'svelte-html-modal';
 	import { slide } from 'svelte/transition';
 	import { t } from './i18n.ts';
-	import Toggle from './Toggle.svelte';
 
 	let { data, form } = $props();
 
-	const fToggle = createFormHelper();
 	const fModal = createFormHelper({ updateOptions: { reset: false } });
-
 	let isOpen = $state(false);
 	const open = () => {
 		// The `form` prop should not be updated on the close event
@@ -19,6 +18,17 @@
 		if (form?.userId) form = null;
 		isOpen = true;
 	};
+
+	const fToggle = createFormHelper({
+		onBeforeSubmit: ({ submitter }) => {
+			if (submitter) submitter.ariaBusy = 'true';
+		},
+		onAfterSubmit: async ({ submitter, update }) => {
+			await update({ invalidateAll: false });
+			await invalidate('admin:roles');
+			if (submitter) submitter.ariaBusy = 'false';
+		}
+	});
 </script>
 
 <div class="modal-wrapper">
@@ -99,8 +109,6 @@
 	</Modal>
 </div>
 
-<!-- TODO Debounce invalidation function calls. -->
-<!-- TODO Fix checkbox spinner not being shown. -->
 <form method="post" use:enhance={fToggle.submitFunction}>
 	<nav>
 		<button type="button" onclick={open} class="btn btn-xs btn-secondary">
@@ -108,7 +116,8 @@
 		</button>
 	</nav>
 	{#if data.users.length}
-		<div
+		<fieldset
+			disabled={fToggle.state === 'submitting'}
 			class="-mx-[--container-padding] mt-[--container-padding] overflow-x-auto border-y-[1px] border-gray-200 sm:mx-0 sm:rounded sm:border-[1px]"
 		>
 			<table class="divide-y divide-gray-300">
@@ -128,18 +137,38 @@
 								{user.profile.surname}
 							</td>
 							<td>{user.contact}</td>
-							<td><Toggle {user} role="admin"></Toggle></td>
-							<td><Toggle {user} role="superuser"></Toggle></td>
+							<td>{@render toggle(user, 'admin')}</td>
+							<td>{@render toggle(user, 'superuser')}</td>
 						</tr>
 					{/each}
 				</tbody>
 			</table>
-		</div>
+		</fieldset>
 	{/if}
 </form>
+
+{#snippet toggle(user: (typeof data.users)[number], role: Role)}
+	{@const isActive = user.roles.has(role)}
+	{@const action = new URLSearchParams({ [!isActive ? '/assign' : '/revoke']: '', role })}
+	<button
+		formaction="?{action.toString()}"
+		name="user-id"
+		value={user.id}
+		role="switch"
+		aria-checked={isActive}
+		aria-label={t[role]}
+	>
+	</button>
+{/snippet}
 
 <style lang="postcss">
 	.modal-wrapper > :global(dialog) {
 		@apply w-80 rounded-md p-4 backdrop:backdrop-blur backdrop:backdrop-brightness-50;
+	}
+	td > button[role='switch'] {
+		@apply m-auto aria-busy:btn-spinner;
+		&:not([aria-busy='true']) {
+			@apply tw-checkbox block aria-checked:tw-checkbox-checked;
+		}
 	}
 </style>

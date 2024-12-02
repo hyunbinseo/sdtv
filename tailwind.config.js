@@ -33,13 +33,35 @@ export default {
 	},
 	plugins: [
 		forms,
-		plugin(({ addComponents, addUtilities, addVariant }) => {
+		// TODO In Tailwind CSS v4, check if custom components defined in a CSS file
+		// can be used in Svelte components' style tags using the `@apply` directive.
+		plugin(({ addComponents, addUtilities, addVariant, theme }) => {
+			// tailwindcss-forms@0.5.9
+			addComponents({
+				'.tw-checkbox': {
+					'display': 'inline-block',
+					'width': theme('width.4'),
+					'height': theme('height.4'),
+					'flex-shrink': '0',
+					'border-width': theme('borderWidth.DEFAULT'),
+					'border-color': theme('colors.gray.500'),
+					'background-color': theme('colors.white'),
+					'vertical-align': 'middle',
+					'color': theme('colors.blue.600')
+				},
+				'.tw-checkbox-checked': {
+					'border-color': 'transparent',
+					'background-color': 'currentColor',
+					'background-image': `url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3E%3C/svg%3E")`,
+					'background-size': '100% 100%',
+					'background-position': 'center',
+					'background-repeat': 'no-repeat'
+				}
+			});
 			// Actual styles are defined in the `app.css` file.
 			// Component order matches Prettier sorting order.
 			addComponents({
 				'.ua-anchor': {},
-				'.tw-checkbox': {},
-				'.tw-checkbox-checked': {},
 				'.btn': {},
 				'.btn-xs': {},
 				'.btn-sm': {},
@@ -47,7 +69,11 @@ export default {
 				'.btn-primary': {},
 				'.btn-secondary': {},
 				'.btn-danger': {},
-				'.btn-spinner': {}
+				'.btn-spinner': {
+					'@apply flex items-center justify-center gap-x-[0.3em]': '',
+					'@apply before:size-[1em] before:origin-center before:animate-spin before:rounded-full before:border-[0.2em] before:border-solid before:border-current before:border-t-transparent before:opacity-50':
+						''
+				}
 			});
 			addUtilities({
 				// Reference https://tailwindcss.com/docs/font-size

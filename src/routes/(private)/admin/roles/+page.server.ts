@@ -15,7 +15,9 @@ import { banUserSessions } from '../index.server.ts';
 import type { PageServerLoad } from './$types.js';
 import { t } from './i18n.ts';
 
-export const load = (async ({ locals }) => {
+export const load = (async ({ depends, locals }) => {
+	depends('admin:roles');
+
 	if (!locals.session?.roles.has('superuser')) error(403);
 
 	const users = await db
