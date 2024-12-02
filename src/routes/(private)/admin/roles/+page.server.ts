@@ -9,7 +9,7 @@ import {
 import { pickTableColumns } from '$lib/server/database/utilities.ts';
 import { parseOrErrorPage } from '$lib/utilities.ts';
 import { error } from '@sveltejs/kit';
-import { and, count, eq, isNull, not, sql } from 'drizzle-orm';
+import { and, eq, isNull, not, notExists, sql } from 'drizzle-orm';
 import { minLength, notValue, picklist, pipe, string, trim, ulid } from 'valibot';
 import { banUserSessions } from '../index.server.ts';
 import type { PageServerLoad } from './$types.js';
@@ -66,17 +66,22 @@ export const actions = {
 			})
 			.from(userTable)
 			.innerJoin(profileTable, eq(profileTable.userId, userTable.id))
-			.leftJoin(
-				roleTable,
-				and(
-					eq(roleTable.userId, userTable.id), //
-					isNull(roleTable.revokedAt)
-				)
-			)
+			.leftJoin(roleTable, eq(roleTable.userId, userTable.id))
 			.groupBy(userTable.id)
-			.having(eq(count(roleTable.id), 0))
 			.where(
 				and(
+					notExists(
+						db
+							.select()
+							.from(roleTable)
+							.where(
+								and(
+									eq(roleTable.userId, userTable.id), //
+									isNull(roleTable.revokedAt)
+								)
+							)
+					),
+					// Blocked by https://github.com/drizzle-team/drizzle-orm/issues/638
 					sql`${profileTable.givenName} LIKE ${`%${givenNameKeyword}%`} COLLATE NOCASE`,
 					isNull(userTable.deactivatedAt),
 					not(eq(userTable.id, locals.session.userId))
@@ -95,11 +100,9 @@ export const actions = {
 			formData.get('user-id')
 		);
 
-		const isNewUser = formData.has('role');
-
 		const role = parseOrErrorPage(
-			picklist(Roles), //
-			isNewUser ? formData.get('role') : e.url.searchParams.get('role')
+			picklist(Roles),
+			formData.get('role') || e.url.searchParams.get('role')
 		);
 
 		await db //
@@ -108,7 +111,7 @@ export const actions = {
 
 		await banUserSessions(e, e.locals.session, [userId]);
 
-		if (isNewUser) return { userId };
+		return { userId };
 	},
 	revoke: async (e) => {
 		if (!e.locals.session?.roles.has('superuser')) error(403);
@@ -127,7 +130,10 @@ export const actions = {
 
 		await db
 			.update(roleTable)
-			.set({ revokedAt: new Date(), revokedBy: e.locals.session.userId })
+			.set({
+				revokedAt: new Date(),
+				revokedBy: e.locals.session.userId
+			})
 			.where(
 				and(
 					eq(roleTable.userId, userId), //
