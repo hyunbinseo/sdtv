@@ -138,8 +138,7 @@
 		}
 	}
 	nav.bottom {
-		a,
-		button {
+		a {
 			@apply border-t-4 pb-1;
 		}
 	}

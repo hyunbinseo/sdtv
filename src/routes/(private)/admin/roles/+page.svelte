@@ -165,10 +165,15 @@
 	.modal-wrapper > :global(dialog) {
 		@apply w-80 rounded-md p-4 backdrop:backdrop-blur backdrop:backdrop-brightness-50;
 	}
-	td > button[role='switch'] {
-		@apply m-auto aria-busy:btn-spinner;
+	button[role='switch'] {
+		@apply m-auto;
 		&:not([aria-busy='true']) {
 			@apply tw-checkbox block aria-checked:tw-checkbox-checked;
+		}
+		/* The `:global()` modifier is used to preserve the CSS. */
+		/* Reference https://github.com/sveltejs/svelte/issues/1594 */
+		&:global([aria-busy='true']) {
+			@apply btn-spinner;
 		}
 	}
 </style>
