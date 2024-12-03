@@ -1,4 +1,7 @@
 {
+	"scripts": {
+		"changeset:version": "changeset version && git add . && git commit -m 'chore: version packages' && changeset tag && git push && git push --tags"
+	},
 	"type": "module",
 	"devDependencies": {
 		"@changesets/cli": "^2.27.10"

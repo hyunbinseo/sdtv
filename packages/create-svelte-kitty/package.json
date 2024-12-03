@@ -1,0 +1,24 @@
+{
+	"name": "create-svelte-kitty",
+	"description": "A DX-first, type-safe SvelteKit starter template built for self-hosting. Includes authentication and user management.",
+	"version": "0.0.0",
+	"scripts": {},
+	"bin": "index.js",
+	"type": "module",
+	"devDependencies": {
+		"@types/node": "^22.10.1"
+	},
+	"engines": {
+		"node": ">=22.11.0"
+	},
+	"author": "Hyunbin Seo",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/hyunbinseo/svelte-kitty.git"
+	},
+	"bugs": {
+		"url": "https://github.com/hyunbinseo/svelte-kitty/issues"
+	},
+	"homepage": "https://github.com/hyunbinseo/svelte-kitty#readme"
+}
