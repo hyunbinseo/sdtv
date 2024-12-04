@@ -15,7 +15,6 @@ import {
 	userTable,
 	type Role
 } from './database/schema.ts';
-import { sqlUnixEpoch } from './database/sql.ts';
 import { pickTableColumns } from './database/utilities.ts';
 
 const jwtSecret = base64ToUint8Array(JWT_SECRET);
@@ -143,8 +142,9 @@ export const banCurrentSessions = async (
 	session: Session,
 	options?: { delay: true }
 ) => {
-	const bannedAtDelayed = sql`${sqlUnixEpoch} + ${sessionBanDelayInSeconds}`.as('banned_at');
-	const bannedAtNow = sqlUnixEpoch.as('banned_at');
+	const unixTimestamp = Math.floor(Date.now() / 1000);
+	const bannedAtDelayed = sql`${unixTimestamp + sessionBanDelayInSeconds}`.as('banned_at');
+	const bannedAtNow = sql`${unixTimestamp}`.as('banned_at');
 	const bannedBy = sql`${session.userId}`.as('banned_by');
 	const ip = sql`${e.getClientAddress()}`.as('ip');
 

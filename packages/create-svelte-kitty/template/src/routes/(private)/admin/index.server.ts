@@ -1,6 +1,5 @@
 import { db } from '$lib/server/database/client.ts';
 import { sessionBanTable, sessionTable } from '$lib/server/database/schema.ts';
-import { sqlUnixEpoch } from '$lib/server/database/sql.ts';
 import { type RequestEvent } from '@sveltejs/kit';
 import { and, gt, inArray, sql } from 'drizzle-orm';
 
@@ -17,7 +16,7 @@ export const banUserSessions = (e: RequestEvent, session: Session, userIds: stri
 			db
 				.select({
 					sessionId: sessionTable.id,
-					bannedAt: sqlUnixEpoch.as('banned_at'),
+					bannedAt: sql`${Math.floor(Date.now() / 1000)}`.as('banned_at'),
 					bannedBy: sql`${session.userId}`.as('banned_by'),
 					ip: sql`${e.getClientAddress()}`.as('ip')
 				})
