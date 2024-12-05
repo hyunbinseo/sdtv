@@ -16,8 +16,5 @@ export const parseOrErrorPage = <Schema extends GenericSchema<Input, unknown>, I
 	return result.output;
 };
 
-export const uint8ArrayToBase64 = (uint8Array: Uint8Array) =>
-	btoa(String.fromCharCode.apply(null, [...uint8Array]));
-
 export const base64ToUint8Array = (base64: string) =>
 	Uint8Array.from(atob(base64), (char) => char.charCodeAt(0));

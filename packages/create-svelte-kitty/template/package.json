@@ -1,5 +1,4 @@
 {
-	"name": "svelte-kitty",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
@@ -49,7 +48,7 @@
 		"vite": "^6.0.1"
 	},
 	"engines": {
-		"node": ">=22"
+		"node": ">=22.12.0"
 	},
 	"type": "module"
 }

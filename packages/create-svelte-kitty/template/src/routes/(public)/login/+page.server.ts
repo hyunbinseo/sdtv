@@ -1,5 +1,5 @@
 import { dev } from '$app/environment';
-import { EMAIL_FROM, EMAIL_TOKEN, MASTER_CONTACT } from '$env/static/private';
+import { EMAIL_API_KEY, EMAIL_SENDER, ROOT_ADMIN_CONTACT } from '$env/static/private';
 import { PUBLIC_PRIVATE_PATH } from '$env/static/public';
 import { authenticate } from '$lib/server/authenticate.ts';
 import { db } from '$lib/server/database/client.ts';
@@ -94,7 +94,7 @@ export const actions = {
 					.returning(pickTableColumns(userTable, ['id']))
 			)[0];
 
-		if (!existingUser && contact === MASTER_CONTACT)
+		if (!existingUser && contact === ROOT_ADMIN_CONTACT)
 			await db.insert(roleTable).values({
 				userId: user.id,
 				role: 'superuser',
@@ -121,8 +121,15 @@ export const actions = {
 
 		if (!dev) {
 			const response = await sendEmail(
-				{ To: contact, ...t.template(magicLink, login.otp) },
-				{ from: EMAIL_FROM, serverToken: EMAIL_TOKEN, fetch }
+				{
+					...t.template(magicLink, login.otp),
+					To: contact
+				},
+				{
+					from: EMAIL_SENDER,
+					serverToken: EMAIL_API_KEY,
+					fetch
+				}
 			);
 
 			if (response instanceof Error || !response.ok) {
