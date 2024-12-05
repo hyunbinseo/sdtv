@@ -14,6 +14,12 @@ importers:
       globals:
         specifier: ^15.12.0
         version: 15.13.0
+      prettier-plugin-svelte:
+        specifier: ^3.3.2
+        version: 3.3.2(prettier@3.4.1)(svelte@5.4.0)
+      prettier-plugin-tailwindcss:
+        specifier: ^0.6.9
+        version: 0.6.9(prettier-plugin-svelte@3.3.2(prettier@3.4.1)(svelte@5.4.0))(prettier@3.4.1)
 
   packages/create-svelte-kitty:
     dependencies:
