@@ -3,7 +3,14 @@
 import * as p from '@clack/prompts';
 import { exec, spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
-import { appendFileSync, cpSync, existsSync, readdirSync, writeFileSync } from 'node:fs';
+import {
+	appendFileSync,
+	cpSync,
+	existsSync,
+	readdirSync,
+	renameSync,
+	writeFileSync
+} from 'node:fs';
 import path from 'node:path';
 import { chdir, cwd, exit } from 'node:process';
 import { setTimeout } from 'node:timers/promises';
@@ -84,8 +91,9 @@ await p.tasks([
 			const resolvedPath = path.resolve(cwd(), project.relativePath);
 			cpSync(import.meta.dirname + '/template', resolvedPath, { recursive: true });
 			chdir(resolvedPath); // NOTE CWD is now the project directory.
-			writeFileSync('.env.local', env);
 			appendFileSync('svelte.config.js', `\n// created with ${pkg.name}@${pkg.version}\n`);
+			renameSync('package.template.json', 'package.json');
+			writeFileSync('.env.local', env);
 			await timer;
 			return 'Successfully copied template';
 		}
