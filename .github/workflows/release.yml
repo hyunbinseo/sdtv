@@ -29,13 +29,6 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
 
-      # Reference https://github.com/changesets/action/issues/98
-      - name: Create a .npmrc file
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
@@ -44,4 +37,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG__AUTH: '//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}'
           NPM_CONFIG_PROVENANCE: true
