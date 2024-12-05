@@ -1,9 +1,10 @@
 import { defineConfig } from 'drizzle-kit';
-import { env, loadEnvFile } from 'node:process';
+import { loadEnvFile } from 'node:process';
+import { object, parse, string } from 'valibot';
 
 loadEnvFile('.env.production');
 
-if (!env.SQLITE_PATH) throw new TypeError('SQLITE_PATH is undefined');
+const env = parse(object({ SQLITE_PATH: string() }), process.env);
 
 export default defineConfig({
 	dialect: 'sqlite',
