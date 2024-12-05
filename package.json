@@ -1,5 +1,7 @@
 {
-	"scripts": {},
+	"scripts": {
+		"ci:publish": "pnpm publish -r"
+	},
 	"type": "module",
 	"devDependencies": {
 		"@changesets/cli": "^2.27.10",
