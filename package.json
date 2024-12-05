@@ -1,6 +1,6 @@
 {
 	"scripts": {
-		"ci:publish": "pnpm publish -r"
+		"ci:release": "changeset publish"
 	},
 	"type": "module",
 	"devDependencies": {
