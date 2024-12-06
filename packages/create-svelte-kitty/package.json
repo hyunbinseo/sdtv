@@ -18,6 +18,7 @@
 	"files": [
 		"template/",
 		"template/.gitignore",
+		"!template/drizzle/",
 		"CHANGELOG.md"
 	],
 	"author": "Hyunbin Seo",

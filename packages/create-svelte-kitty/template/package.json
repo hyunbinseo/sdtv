@@ -1,4 +1,5 @@
 {
+	"name": "svelte-kitty-starter",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",

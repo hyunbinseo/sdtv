@@ -3,20 +3,17 @@
 import * as p from '@clack/prompts';
 import { exec, spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
-import {
-	appendFileSync,
-	cpSync,
-	existsSync,
-	readdirSync,
-	renameSync,
-	writeFileSync
-} from 'node:fs';
+import { appendFileSync, cpSync, existsSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { chdir, cwd, exit } from 'node:process';
 import { setTimeout } from 'node:timers/promises';
 import { promisify, styleText } from 'node:util';
 import { email, pipe, safeParse, string } from 'valibot';
 import pkg from './package.json' with { type: 'json' };
+
+// NOTE The template's package.json only includes a "name" field because:
+// - @changesets/cli requires package.json files to include a "name" field.
+// - @changesets/cli ignores package.json files without a "version" field.
 
 // eslint-disable-next-line no-console
 console.clear();
@@ -92,7 +89,6 @@ await p.tasks([
 			cpSync(import.meta.dirname + '/template', resolvedPath, { recursive: true });
 			chdir(resolvedPath); // NOTE CWD is now the project directory.
 			appendFileSync('svelte.config.js', `\n// created with ${pkg.name}@${pkg.version}\n`);
-			renameSync('package.template.json', 'package.json');
 			writeFileSync('.env.local', env);
 			await timer;
 			return 'Successfully copied template';
