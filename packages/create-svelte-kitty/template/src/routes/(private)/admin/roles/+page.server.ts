@@ -9,7 +9,7 @@ import {
 import { pickTableColumns } from '$lib/server/database/utilities.ts';
 import { parseOrErrorPage } from '$lib/utilities.ts';
 import { error } from '@sveltejs/kit';
-import { and, eq, isNull, not, notExists, sql } from 'drizzle-orm';
+import { and, eq, isNull, ne, notExists, sql } from 'drizzle-orm';
 import { minLength, notValue, picklist, pipe, string, trim, ulid } from 'valibot';
 import { banUserSessions } from '../index.server.ts';
 import type { PageServerLoad } from './$types.js';
@@ -41,7 +41,7 @@ export const load = (async ({ depends, locals }) => {
 		.where(
 			and(
 				isNull(userTable.deactivatedAt), //
-				not(eq(userTable.id, locals.session.userId))
+				ne(userTable.id, locals.session.userId)
 			)
 		);
 
@@ -84,7 +84,7 @@ export const actions = {
 					// Blocked by https://github.com/drizzle-team/drizzle-orm/issues/638
 					sql`${profileTable.givenName} LIKE ${`%${givenNameKeyword}%`} COLLATE NOCASE`,
 					isNull(userTable.deactivatedAt),
-					not(eq(userTable.id, locals.session.userId))
+					ne(userTable.id, locals.session.userId)
 				)
 			);
 

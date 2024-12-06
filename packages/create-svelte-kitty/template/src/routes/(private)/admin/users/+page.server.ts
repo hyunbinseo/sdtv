@@ -3,7 +3,7 @@ import { profileTable, userTable } from '$lib/server/database/schema.ts';
 import { pickTableColumns } from '$lib/server/database/utilities.ts';
 import { parseOrErrorPage } from '$lib/utilities.ts';
 import { error } from '@sveltejs/kit';
-import { and, asc, desc, eq, inArray, isNotNull, isNull, not, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, isNotNull, isNull, ne, sql } from 'drizzle-orm';
 import { array, excludes, minLength, pipe, string, ulid } from 'valibot';
 import { banUserSessions } from '../index.server.ts';
 import type { PageServerLoad } from './$types.js';
@@ -25,7 +25,7 @@ export const load = (async ({ locals, url }) => {
 		.where(
 			and(
 				(!showDeactivated ? isNull : isNotNull)(userTable.deactivatedAt),
-				not(eq(userTable.id, locals.session.userId))
+				ne(userTable.id, locals.session.userId)
 			)
 		)
 		.orderBy(
