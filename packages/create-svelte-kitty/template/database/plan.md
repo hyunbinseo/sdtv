@@ -14,7 +14,7 @@ select "id", (select json_array("user_id") as "data" from (select * from "profil
 │ 3       │ 22 │ 16     │ 39      │ 'SEARCH userTable_profile USING INDEX sqlite_autoindex_profile_1 (user_id=?)' │
 │ 4       │ 36 │ 13     │ 17      │ 'SCAN userTable_profile'                                                      │
 │ 5       │ 46 │ 0      │ 0       │ 'CORRELATED SCALAR SUBQUERY 3'                                                │
-│ 6       │ 51 │ 46     │ 216     │ 'SCAN userTable_roles'                                                        │
+│ 6       │ 52 │ 46     │ 62      │ 'SEARCH userTable_roles USING INDEX idx_role_user_id (user_id=?)'             │
 └─────────┴────┴────────┴─────────┴───────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -70,11 +70,10 @@ select "user"."id", "user"."contact", "profile"."surname", "profile"."given_name
 ┌─────────┬────┬────────┬─────────┬─────────────────────────────────────────────────────────────────────┐
 │ (index) │ id │ parent │ notused │ detail                                                              │
 ├─────────┼────┼────────┼─────────┼─────────────────────────────────────────────────────────────────────┤
-│ 0       │ 10 │ 0      │ 216     │ 'SCAN role'                                                         │
-│ 1       │ 14 │ 0      │ 47      │ 'SEARCH user USING INDEX sqlite_autoindex_user_1 (id=?)'            │
-│ 2       │ 23 │ 0      │ 47      │ 'SEARCH profile USING INDEX sqlite_autoindex_profile_1 (user_id=?)' │
-│ 3       │ 31 │ 0      │ 0       │ 'USE TEMP B-TREE FOR GROUP BY'                                      │
-│ 4       │ 75 │ 0      │ 0       │ 'USE TEMP B-TREE FOR group_concat(DISTINCT)'                        │
+│ 0       │ 11 │ 0      │ 224     │ 'SCAN user USING INDEX sqlite_autoindex_user_1'                     │
+│ 1       │ 18 │ 0      │ 47      │ 'SEARCH profile USING INDEX sqlite_autoindex_profile_1 (user_id=?)' │
+│ 2       │ 26 │ 0      │ 62      │ 'SEARCH role USING INDEX idx_role_user_id (user_id=?)'              │
+│ 3       │ 69 │ 0      │ 0       │ 'USE TEMP B-TREE FOR group_concat(DISTINCT)'                        │
 └─────────┴────┴────────┴─────────┴─────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -85,15 +84,15 @@ select "user"."id", "user"."contact", "profile"."surname", "profile"."given_name
 ```
 
 ```
-┌─────────┬────┬────────┬─────────┬─────────────────────────────────────────────────────────────────────┐
-│ (index) │ id │ parent │ notused │ detail                                                              │
-├─────────┼────┼────────┼─────────┼─────────────────────────────────────────────────────────────────────┤
-│ 0       │ 10 │ 0      │ 223     │ 'SCAN user USING INDEX sqlite_autoindex_user_1'                     │
-│ 1       │ 18 │ 0      │ 0       │ 'CORRELATED SCALAR SUBQUERY 1'                                      │
-│ 2       │ 22 │ 18     │ 216     │ 'SCAN role'                                                         │
-│ 3       │ 34 │ 0      │ 47      │ 'SEARCH profile USING INDEX sqlite_autoindex_profile_1 (user_id=?)' │
-│ 4       │ 50 │ 0      │ 53      │ 'SEARCH role USING AUTOMATIC COVERING INDEX (user_id=?) LEFT-JOIN'  │
-└─────────┴────┴────────┴─────────┴─────────────────────────────────────────────────────────────────────┘
+┌─────────┬────┬────────┬─────────┬───────────────────────────────────────────────────────────────────────────┐
+│ (index) │ id │ parent │ notused │ detail                                                                    │
+├─────────┼────┼────────┼─────────┼───────────────────────────────────────────────────────────────────────────┤
+│ 0       │ 10 │ 0      │ 223     │ 'SCAN user USING INDEX sqlite_autoindex_user_1'                           │
+│ 1       │ 18 │ 0      │ 0       │ 'CORRELATED SCALAR SUBQUERY 1'                                            │
+│ 2       │ 23 │ 18     │ 62      │ 'SEARCH role USING INDEX idx_role_user_id (user_id=?)'                    │
+│ 3       │ 35 │ 0      │ 47      │ 'SEARCH profile USING INDEX sqlite_autoindex_profile_1 (user_id=?)'       │
+│ 4       │ 43 │ 0      │ 54      │ 'SEARCH role USING COVERING INDEX idx_role_user_id (user_id=?) LEFT-JOIN' │
+└─────────┴────┴────────┴─────────┴───────────────────────────────────────────────────────────────────────────┘
 ```
 
 ## 6
@@ -103,11 +102,11 @@ update "role" set "revoked_at" = 1700000000, "revoked_by" = ? where ("role"."use
 ```
 
 ```
-┌─────────┬────┬────────┬─────────┬─────────────┐
-│ (index) │ id │ parent │ notused │ detail      │
-├─────────┼────┼────────┼─────────┼─────────────┤
-│ 0       │ 4  │ 0      │ 216     │ 'SCAN role' │
-└─────────┴────┴────────┴─────────┴─────────────┘
+┌─────────┬────┬────────┬─────────┬────────────────────────────────────────────────────────┐
+│ (index) │ id │ parent │ notused │ detail                                                 │
+├─────────┼────┼────────┼─────────┼────────────────────────────────────────────────────────┤
+│ 0       │ 5  │ 0      │ 62      │ 'SEARCH role USING INDEX idx_role_user_id (user_id=?)' │
+└─────────┴────┴────────┴─────────┴────────────────────────────────────────────────────────┘
 ```
 
 ## 7
