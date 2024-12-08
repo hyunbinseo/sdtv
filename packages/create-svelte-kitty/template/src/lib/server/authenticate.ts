@@ -1,11 +1,12 @@
 import { dev } from '$app/environment';
-import { JWT_SECRET, SESSION_COOKIE_NAME } from '$env/static/private';
+import { JWT_SECRET_CURRENT, JWT_SECRET_EXPIRED, SESSION_COOKIE_NAME } from '$env/static/private';
 import { base64ToUint8Array } from '$lib/utilities.ts';
 import { toReadonly } from '@hyunbinseo/tools';
 import { error, type RequestEvent } from '@sveltejs/kit';
 import { and, eq, gt, isNull, lt, ne, sql } from 'drizzle-orm';
 import { union } from 'drizzle-orm/sqlite-core';
-import { jwtVerify, SignJWT, type JWTPayload } from 'jose';
+import { decodeJwt, jwtVerify, SignJWT, type JWTPayload } from 'jose';
+import type { JOSEError } from 'jose/errors';
 import { db } from './database/client.ts';
 import { sessionBanDelay, sessionBanDelayInSeconds } from './database/config.ts';
 import {
@@ -17,7 +18,8 @@ import {
 } from './database/schema.ts';
 import { pickTableColumns } from './database/utilities.ts';
 
-const jwtSecret = base64ToUint8Array(JWT_SECRET);
+const jwtSecret = base64ToUint8Array(JWT_SECRET_CURRENT);
+const jwtSecretExpired = base64ToUint8Array(JWT_SECRET_EXPIRED);
 
 type Payload = {
 	profile?: null;
@@ -70,11 +72,11 @@ export const authenticate = async (e: RequestEvent, userId: string, loginId: str
 		secure: !dev || e.url.protocol === 'https:'
 	});
 
-	const { payload } = await jwtVerify<Payload>(jwt, jwtSecret);
+	const payload = await decodeJwt<Payload>(jwt);
 	e.locals.session = payloadToSession(payload);
 };
 
-const payloadToSession = (payload: Payload): NonNullable<App.Locals['session']> => {
+export const payloadToSession = (payload: Payload): NonNullable<App.Locals['session']> => {
 	const roles = toReadonly(new Set(payload.roles));
 	return {
 		id: payload.jti,
@@ -86,30 +88,23 @@ const payloadToSession = (payload: Payload): NonNullable<App.Locals['session']> 
 	};
 };
 
-export const validateSession = async (e: RequestEvent) => {
-	const jwt = e.cookies.get(SESSION_COOKIE_NAME);
-	if (!jwt) return;
+export const verifyJwt = async (jwt: string) => {
+	let result = await jwtVerify<Payload>(jwt, jwtSecret).catch((e) => e as JOSEError);
+	if (result instanceof Error)
+		// Retry using the previous JWT secret.
+		result = await jwtVerify<Payload>(jwt, jwtSecretExpired);
 
-	try {
-		// Errors can be thrown. (e.g. JWTClaimValidationFailed, JWTExpired, JWTInvalid)
-		// Reference https://github.com/panva/jose/blob/main/docs/modules/util_errors.md
-		const { payload } = await jwtVerify<Payload>(jwt, jwtSecret);
+	const sessionBan = await db.query.sessionBanTable.findFirst({
+		columns: { sessionId: true },
+		where: and(
+			eq(sessionBanTable.sessionId, result.payload.jti), //
+			lt(sessionBanTable.bannedAt, new Date())
+		)
+	});
 
-		const sessionBan = await db.query.sessionBanTable.findFirst({
-			columns: { sessionId: true },
-			where: and(
-				eq(sessionBanTable.sessionId, payload.jti),
-				lt(sessionBanTable.bannedAt, new Date())
-			)
-		});
+	if (sessionBan) throw new Error();
 
-		if (sessionBan) throw new Error();
-
-		e.locals.session = payloadToSession(payload);
-	} catch {
-		e.cookies.delete(SESSION_COOKIE_NAME, { path: '/' });
-		e.locals.session = undefined;
-	}
+	return result;
 };
 
 type Session = NonNullable<App.Locals['session']>;

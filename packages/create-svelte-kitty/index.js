@@ -78,7 +78,8 @@ ROOT_ADMIN_CONTACT="${project.rootAdminContact}"
 EMAIL_API_KEY="" # ${project.emailProvider}
 EMAIL_SENDER=""
 
-JWT_SECRET="${randomBytes(32).toString('base64')}"`.trim();
+JWT_SECRET_CURRENT="${randomBytes(32).toString('base64')}"
+JWT_SECRET_EXPIRED="${randomBytes(32).toString('base64')}"`.trim();
 
 await p.tasks([
 	{

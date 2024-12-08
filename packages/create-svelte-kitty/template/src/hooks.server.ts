@@ -1,9 +1,23 @@
-import { VITE_LOCALE } from '$env/static/private';
-import { validateSession } from '$lib/server/authenticate.ts';
+import { SESSION_COOKIE_NAME, VITE_LOCALE } from '$env/static/private';
+import { payloadToSession, verifyJwt } from '$lib/server/authenticate.ts';
 import type { Handle } from '@sveltejs/kit';
+import { JWSSignatureVerificationFailed } from 'jose/errors';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	await validateSession(event);
+	const jwt = event.cookies.get(SESSION_COOKIE_NAME);
+
+	if (jwt) {
+		try {
+			const result = await verifyJwt(jwt);
+			event.locals.session = payloadToSession(result.payload);
+		} catch (e) {
+			if (e instanceof JWSSignatureVerificationFailed) {
+				// NOTE Monitor errors and take actions if needed.
+			}
+			event.cookies.delete(SESSION_COOKIE_NAME, { path: '/' });
+			event.locals.session = undefined;
+		}
+	}
 
 	const response = await resolve(event, {
 		// This only works in SSR, when the HTML is sent to the client.
