@@ -1,5 +1,27 @@
 {
 	"name": "svelte-kitty",
 	"version": "0.0.1",
-	"author": "Hyunbin Seo"
+	"scripts": {},
+	"bin": "index.js",
+	"type": "module",
+	"peerDependencies": {
+		"@sveltejs/kit": "^2.9.0",
+		"vite": "^6.0.3"
+	},
+	"devDependencies": {
+		"@types/node": "^22.10.1"
+	},
+	"engines": {
+		"node": ">=22.12.0"
+	},
+	"author": "Hyunbin Seo",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/hyunbinseo/svelte-kitty.git"
+	},
+	"bugs": {
+		"url": "https://github.com/hyunbinseo/svelte-kitty/issues"
+	},
+	"homepage": "https://github.com/hyunbinseo/svelte-kitty#readme"
 }
