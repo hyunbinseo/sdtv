@@ -22,9 +22,11 @@
 		<noscript class="bg-yellow-300 p-2">{t.noscript}</noscript>
 		<a
 			href="#main-content"
+			onclick={() => (window.location.hash = 'main-content')}
 			class="btn btn-primary rounded-none [&:not(:focus)]:sr-only"
-			data-sveltekit-reload>{t['skip-to-content']}</a
 		>
+			{t['skip-to-content']}
+		</a>
 		<!-- `z-index` keeps the `position: relative` children from scrolling above. -->
 		<div class="sticky top-0 z-10 bg-white/75 backdrop-blur">
 			{@render topNav?.()}
