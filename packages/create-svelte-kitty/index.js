@@ -72,14 +72,29 @@ const project = await p.group(
 // Reference https://github.com/bombshell-dev/clack/issues/172
 const execAsync = promisify(exec);
 
-const env = `
+const env = `# DO NOT COMMIT THIS FILE TO SOURCE CONTROL
+
 ROOT_ADMIN_CONTACT="${project.rootAdminContact}"
+`;
+
+const generateEnv = () =>
+	`# DO NOT COMMIT THIS FILE TO SOURCE CONTROL
 
 EMAIL_API_KEY="" # ${project.emailProvider}
 EMAIL_SENDER=""
 
 JWT_SECRET_CURRENT="${randomBytes(32).toString('base64')}"
-JWT_SECRET_EXPIRED="${randomBytes(32).toString('base64')}"`.trim();
+JWT_SECRET_EXPIRED="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+`;
+
+const envDev = generateEnv();
+const envProd =
+	generateEnv() +
+	`
+SERVER_ADDRESS=""
+SERVER_USERNAME=""
+SERVER_DIRECTORY="server"
+`;
 
 await p.tasks([
 	{
@@ -91,6 +106,8 @@ await p.tasks([
 			chdir(resolvedPath); // NOTE CWD is now the project directory.
 			appendFileSync('svelte.config.js', `\n// created with ${pkg.name}@${pkg.version}\n`);
 			writeFileSync('.env.local', env);
+			writeFileSync('.env.development.local', envDev);
+			writeFileSync('.env.production.local', envProd);
 			await timer;
 			return 'Successfully copied template';
 		}
@@ -129,8 +146,11 @@ cd ${project.relativePath}
 node --run dev
 # ${project.packageManager} run dev
 
-[ ] review and backup file: .env.local
-[ ] login as the root user: ${project.rootAdminContact}`.trim();
+[ ] review and backup generated *.local environment files
+[ ] login as the root administrator: ${project.rootAdminContact}`.trim();
+
+// [ ] review and backup generated *.local environment files
+// [ ] login as the root administrator: username@example.com
 
 p.note(nextSteps, 'Next steps:');
 
