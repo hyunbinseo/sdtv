@@ -18,7 +18,7 @@ import pkg from './package.json' with { type: 'json' };
 // eslint-disable-next-line no-console
 console.clear();
 
-p.intro(styleText(['bgCyan', 'black'], pkg.name));
+p.intro(styleText(['bgCyan', 'black'], `${pkg.name}@${pkg.version}`));
 
 const project = await p.group(
 	{
