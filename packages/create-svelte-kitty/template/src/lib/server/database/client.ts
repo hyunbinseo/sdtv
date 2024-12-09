@@ -18,3 +18,17 @@ export const db = drizzle({
 // Reference https://github.com/WiseLibs/better-sqlite3/blob/master/docs/performance.md
 
 if (!dev) db.$client.pragma('journal_mode = WAL');
+
+// Handle cases where `process` or `process.on` is unavailable in edge runtimes.
+// Reference https://developers.cloudflare.com/workers/runtime-apis/nodejs/process
+// Reference https://vercel.com/docs/functions/runtimes/edge-runtime
+
+if (
+	typeof process !== 'undefined' && //
+	typeof process.on === 'function'
+) {
+	// Reference https://svelte.dev/docs/kit/adapter-node#Graceful-shutdown
+	process.on('sveltekit:shutdown', async () => {
+		await db.$client.close();
+	});
+}
