@@ -1,15 +1,8 @@
 import adapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import { env } from 'node:process';
-import { digits, optional, parse, pipe, string, transform } from 'valibot';
+import { digits, object, optional, parse, pipe, string } from 'valibot';
 
-const AdapterOutSchema = optional(
-	pipe(
-		string(),
-		digits(),
-		transform((id) => `build/${id}`)
-	)
-);
+const env = parse(object({ BUILD_ID: optional(pipe(string(), digits())) }), process.env);
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -22,7 +15,7 @@ const config = {
 		// If your environment is not supported, or you settled on a specific environment, switch out the adapter.
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter({
-			out: parse(AdapterOutSchema, env.BUILD_ID),
+			out: `build/${env.BUILD_ID}`,
 			envPrefix: '' // do not change this value
 		})
 	}
