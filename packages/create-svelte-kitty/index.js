@@ -137,6 +137,7 @@ await p.tasks([
 
 			await execAsync('node --run db:generate');
 			await execAsync('node --run db:migrate');
+			await execAsync('node --run db:migrate@prod');
 
 			const gitIsAvailable = !spawnSync('git', ['--version']).error;
 			if (gitIsAvailable) {

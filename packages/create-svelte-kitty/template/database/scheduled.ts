@@ -7,7 +7,7 @@ import * as schema from '../src/lib/server/database/schema.ts';
 const env = parse(object({ SQLITE_PATH: string() }), process.env);
 
 const db = drizzle({
-	connection: { source: env.SQLITE_PATH },
+	connection: { source: env.SQLITE_PATH, fileMustExist: true },
 	casing: 'snake_case',
 	schema
 });

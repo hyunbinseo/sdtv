@@ -9,7 +9,7 @@ import * as schema from './schema.ts';
 // Reference https://vitejs.dev/guide/env-and-mode#modes
 
 export const db = drizzle({
-	connection: { source: SQLITE_PATH },
+	connection: { source: SQLITE_PATH, fileMustExist: true },
 	casing: 'snake_case',
 	schema
 });
