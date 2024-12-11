@@ -97,6 +97,9 @@ importers:
       new-request:
         specifier: ^0.0.20
         version: 0.0.20
+      pm2-ecosystem:
+        specifier: ^5.4.3
+        version: 5.4.3
       postcss:
         specifier: ^8.4.49
         version: 8.4.49
@@ -1917,6 +1920,9 @@ packages:
   pirates@4.0.6:
     resolution: {integrity: sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==}
     engines: {node: '>= 6'}
+
+  pm2-ecosystem@5.4.3:
+    resolution: {integrity: sha512-phn3qRsFBqfyaBlUeyz6BvSeMz77Tnv4HmKSoUCHz5LAhJ0G/gOBbzbYPABUTiQbpweG3X8W8tWkrRALy/Nrtg==}
 
   postcss-import@15.1.0:
     resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}
@@ -4024,6 +4030,8 @@ snapshots:
   pify@4.0.1: {}
 
   pirates@4.0.6: {}
+
+  pm2-ecosystem@5.4.3: {}
 
   postcss-import@15.1.0(postcss@8.4.49):
     dependencies:
