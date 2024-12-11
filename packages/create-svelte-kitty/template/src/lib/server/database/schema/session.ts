@@ -21,7 +21,5 @@ export const sessionTable = sqliteTable(
 			.$default(() => new Date(Date.now() + sessionExpiresIn)),
 		ip
 	},
-	(table) => ({
-		userIdIdx: index('idx_session_user_id').on(table.userId)
-	})
+	(t) => [index('idx_session_user_id').on(t.userId)]
 );

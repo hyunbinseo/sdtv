@@ -24,9 +24,7 @@ export const loginTable = sqliteTable(
 		expiredAt: integer({ mode: 'timestamp' }),
 		ip
 	},
-	(table) => ({
-		userIdIdx: index('idx_login_user_id').on(table.userId)
-	})
+	(t) => [index('idx_login_user_id').on(t.userId)]
 );
 
 export const loginRelations = relations(loginTable, ({ one }) => ({

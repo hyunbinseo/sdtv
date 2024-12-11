@@ -22,9 +22,7 @@ export const roleTable = sqliteTable(
 		revokedAt: integer({ mode: 'timestamp' }),
 		revokedBy: text().references(() => userTable.id)
 	},
-	(table) => ({
-		userIdIdx: index('idx_role_user_id').on(table.userId)
-	})
+	(t) => [index('idx_role_user_id').on(t.userId)]
 );
 
 export const roleRelations = relations(roleTable, ({ one }) => ({
