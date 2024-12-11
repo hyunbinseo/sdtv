@@ -12,12 +12,15 @@ const buildId = Date.now();
 mkdirSync('build', { recursive: true });
 
 writeFileSync(
-	'build/preview.js',
+	'build/start.js',
 	`// THIS FILE IS GENERATED ON BUILD
 
-await import('./${buildId}/index.js');
+import { loadEnvFile } from 'node:process';
 
-export {};
+loadEnvFile('.env.production');
+loadEnvFile('build/.env.local');
+
+await import('./${buildId}/index.js');
 `
 );
 

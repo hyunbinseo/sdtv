@@ -5,7 +5,7 @@
 		"dev": "vite dev",
 		"build": "svelte-kitty build",
 		"preview": "vite preview",
-		"preview@node": "node --env-file='build/.env.local' build/preview",
+		"start": "node build/start",
 		"deploy": "svelte-kitty deploy",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",

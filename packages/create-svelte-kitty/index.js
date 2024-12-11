@@ -87,7 +87,7 @@ ROOT_ADMIN_CONTACT="${project.rootAdminContact}"
 const generateEnv = () =>
 	`# DO NOT COMMIT THIS FILE TO SOURCE CONTROL
 
-EMAIL_API_KEY="" # ${project.emailProvider}
+EMAIL_API_KEY=""
 EMAIL_SENDER=""
 
 JWT_SECRET_CURRENT="${randomBytes(32).toString('base64')}"
