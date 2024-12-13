@@ -76,16 +76,10 @@ const project = await p.group(
 	}
 );
 
-// Reference https://github.com/bombshell-dev/clack/issues/172
-const execAsync = promisify(exec);
-
-const env = `# DO NOT COMMIT THIS FILE TO SOURCE CONTROL
-
-ROOT_ADMIN_CONTACT="${project.rootAdminContact}"
-`;
-
 const generateEnv = () =>
 	`# DO NOT COMMIT THIS FILE TO SOURCE CONTROL
+
+ROOT_ADMIN_CONTACT="${project.rootAdminContact}"
 
 EMAIL_API_KEY=""
 EMAIL_SENDER=""
@@ -99,9 +93,12 @@ const envProd =
 	generateEnv() +
 	`
 SERVER_ADDRESS=""
-SERVER_USERNAME=""
+SERVER_USERNAME="web-admin"
 SERVER_DIRECTORY="server"
 `;
+
+// Reference https://github.com/bombshell-dev/clack/issues/172
+const execAsync = promisify(exec);
 
 await p.tasks([
 	{
@@ -116,7 +113,6 @@ await p.tasks([
 				readFileSync('package.json', 'utf8').replaceAll('workspace:', '')
 			);
 			appendFileSync('svelte.config.js', `\n// created with ${pkg.name}@${pkg.version}\n`);
-			writeFileSync('.env.local', env);
 			writeFileSync('.env.development.local', envDev);
 			writeFileSync('.env.production.local', envProd);
 			await timer;
