@@ -109,7 +109,6 @@ write_files:
     content: |
       server {
         listen 8000;
-        real_ip_header CF-Connecting-IP;
 
         location / {
           root /home/webadmin/static;
@@ -119,7 +118,6 @@ write_files:
 
         location @sveltekit {
           proxy_pass http://localhost:3000;
-          proxy_set_header X-Real-IP $remote_addr;
         }
       }
 
