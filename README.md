@@ -21,6 +21,7 @@ For initial deployment, follow this [guide](docs/deployment.md) to setup VPS and
 - ♻️ Automatic Session Renewal for Persistent Logins
 - 🛡️ User Role Management with Instant Deactivation
 - 🙋 User Onboarding with Customizable Data Collection
+- 🔒 Optional JWT Key Rotation for Enhanced Security
 - 📱 Responsive Mobile Layout with Bottom Navigation
 - ⏳ Button Loading Spinner During Form Submission
 - … and so much more!
