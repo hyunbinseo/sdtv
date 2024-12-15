@@ -40,6 +40,7 @@ database/scheduled.ts
 drizzle/
 src/lib/server/database/
 .env.production
+.node-version
 drizzle.production.ts
 package.json
 pm2.config.cjs
@@ -50,7 +51,7 @@ console.log();
 console.log(styleText('cyan', 'Sending files:'));
 
 execSync(
-	`rsync -avzu --files-from=build/rsync.txt ./ ${server.username}@${server.address}:${server.directory}`,
+	`rsync -avzru --files-from=build/rsync.txt ./ ${server.username}@${server.address}:${server.directory}`,
 	{ stdio: 'inherit' }
 );
 

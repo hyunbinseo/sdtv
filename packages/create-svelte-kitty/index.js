@@ -93,7 +93,7 @@ const envProd =
 	generateEnv() +
 	`
 SERVER_ADDRESS=""
-SERVER_USERNAME="web-admin"
+SERVER_USERNAME="webadmin"
 SERVER_DIRECTORY="server"
 `;
 
