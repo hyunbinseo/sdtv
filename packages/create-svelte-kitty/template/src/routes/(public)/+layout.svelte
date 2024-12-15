@@ -36,10 +36,10 @@
 </Container>
 
 {#snippet topNav()}
-	<nav class="top flex h-[--top-navbar-height] shadow-bottom">
-		<img src={logo} alt={t.logo} class="m-auto h-1/2 sm:ml-[--container-padding] sm:mr-0" />
+	<nav class="top shadow-bottom flex h-(--top-navbar-height)">
+		<img src={logo} alt={t.logo} class="m-auto h-1/2 sm:mr-0 sm:ml-(--container-padding)" />
 		<div
-			class="ml-6 flex flex-1 gap-x-6 overflow-x-auto whitespace-nowrap pr-[--container-padding] last:*:ml-auto max-sm:hidden"
+			class="ml-6 flex flex-1 gap-x-6 overflow-x-auto pr-(--container-padding) whitespace-nowrap *:last:ml-auto max-sm:hidden"
 		>
 			{#each navLinks as [href, label] (href)}
 				{@const active = navLinkIsActive(href)}
@@ -50,7 +50,7 @@
 {/snippet}
 
 {#snippet bottomNav()}
-	<nav class="bottom flex h-14 shadow-top *:flex-1">
+	<nav class="bottom shadow-top flex h-14 *:flex-1">
 		{#each navLinks as [href, label] (href)}
 			{@const active = navLinkIsActive(href)}
 			<a {href} class:active>{label}</a>
@@ -59,6 +59,7 @@
 {/snippet}
 
 <style lang="postcss">
+	@import '$lib/theme.css' theme(reference);
 	nav {
 		a {
 			@apply flex items-center justify-center border-transparent text-gray-500 hover:border-gray-400 hover:text-gray-700;

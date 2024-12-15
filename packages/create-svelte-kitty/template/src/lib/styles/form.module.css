@@ -1,3 +1,5 @@
+@import '$lib/theme.css' theme(reference);
+
 form.stacked {
 	label {
 		> span:first-child {
@@ -25,7 +27,8 @@ form.underline {
 	select,
 	textarea,
 	input:not([type='checkbox'], [type='radio'], [type='range'], [type='color'], [type='file']) {
-		@apply mt-0 border-0 border-b-2 border-gray-200 px-0 user-invalid:border-red-200;
+		/* TODO Restore user-invalid: */
+		@apply mt-0 border-0 border-b-2 border-gray-200 px-0;
 	}
 	select {
 		@apply pr-10; /* Reference https://github.com/tailwindlabs/tailwindcss-forms/pull/168 */

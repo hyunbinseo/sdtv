@@ -39,7 +39,7 @@
 	</nav>
 	{#if data.users.length}
 		<div
-			class="-mx-[--container-padding] mt-[--container-padding] overflow-x-auto border-y-[1px] border-gray-200 sm:mx-0 sm:rounded sm:border-[1px]"
+			class="-mx-(--container-padding) mt-(--container-padding) overflow-x-auto border-y-[1px] border-gray-200 sm:mx-0 sm:rounded-sm sm:border-[1px]"
 		>
 			<table class="divide-y divide-gray-300">
 				<thead>
@@ -54,7 +54,7 @@
 						</th>
 					</tr>
 				</thead>
-				<tbody class="divide-y divide-gray-200 hover:*:bg-gray-50 has-[:checked]:*:bg-gray-100">
+				<tbody class="divide-y divide-gray-200 *:hover:bg-gray-50 *:has-checked:bg-gray-100">
 					{#each data.users as user (user.id)}
 						{@const date = data.showDeactivated
 							? user.deactivatedAt
@@ -95,6 +95,7 @@
 </form>
 
 <style lang="postcss">
+	@import '$lib/theme.css' theme(reference);
 	td {
 		@apply empty:after:content-['-'];
 		&:has(> input[type='checkbox']:first-child:last-child) {

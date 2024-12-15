@@ -18,35 +18,36 @@
 <div class="fixed inset-0 bg-gray-600"></div>
 
 <div class="relative flex min-h-screen justify-center md:py-16">
-	<div class="flex w-full max-w-screen-md flex-col bg-white">
+	<div class="flex w-full max-w-(--breakpoint-md) flex-col bg-white">
 		<noscript class="bg-yellow-300 p-2">{t.noscript}</noscript>
 		<a
 			href="#main-content"
 			onclick={() => (window.location.hash = 'main-content')}
-			class="btn btn-primary rounded-none [&:not(:focus)]:sr-only"
+			class="btn btn-primary rounded-none not-focus:sr-only"
 		>
 			{t['skip-to-content']}
 		</a>
 		<!-- `z-index` keeps the `position: relative` children from scrolling above. -->
-		<div class="sticky top-0 z-10 bg-white/75 backdrop-blur">
+		<div class="sticky top-0 z-10 bg-white/75 backdrop-blur-sm">
 			{@render topNav?.()}
 		</div>
-		<div id="main-content" class="flex-1 p-[--container-padding]">
+		<div id="main-content" class="flex-1 p-(--container-padding)">
 			{@render children?.()}
 		</div>
-		<div class="sticky bottom-0 z-10 bg-white/75 backdrop-blur sm:hidden">
+		<div class="sticky bottom-0 z-10 bg-white/75 backdrop-blur-sm sm:hidden">
 			{@render bottomNav?.()}
 		</div>
 	</div>
 </div>
 
 <style lang="postcss">
+	@import '$lib/theme.css' theme(reference);
 	/* `*` selector can be used since the style is scoped. */
 	/* Reference https://stackoverflow.com/a/77054333 */
 	* {
 		/* Anchor with a `href="#a"` scrolls `id="a"` to the top, */
 		/* which can be placed behind and under a sticky top nav. */
-		/* Set `.scroll-mt-[--top-navbar-height]` to avoid this. */
+		/* Set `.scroll-mt-(--top-navbar-height)` to avoid this. */
 		/* Reference https://tailwindcss.com/docs/scroll-margin */
 		--top-navbar-height: theme(size.14);
 		--container-padding: theme(size.5);
