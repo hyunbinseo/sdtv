@@ -6,8 +6,22 @@ In this guide, [Cloudflare] and [Vultr] (Paid) will be used.
 [Vultr]: https://www.vultr.com/
 
 1. Generate an [SSH key] and add it to the ssh-agent.
-2. Prepare a custom domain. Purchase if needed.
-3. [Add the site (domain) to a Cloudflare](https://developers.cloudflare.com/fundamentals/setup/manage-domains/add-site/) free plan.
+2. Prepare a custom domain. Purchase one if needed.
+3. [Add the domain to Cloudflare](https://developers.cloudflare.com/fundamentals/setup/manage-domains/add-site/) and [enforce HTTPS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/always-use-https/).
+
+```
+# https://dash.cloudflare.com
+
+Websites
+├── [+ Add a domain]
+└── <selected-domain>
+    └── SSL/TLS
+        ├── Overview
+        │   └── Current encryption mode: Full (strict)
+        └── Edge Certificates
+            └── ✅ Always Use HTTPS
+```
+
 4. Deploy a new instance in Vultr. ($6/month~)
 
 [SSH key]: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
@@ -75,6 +89,15 @@ yum_repos:
     gpgkey: https://nginx.org/keys/nginx_signing.key
     module_hotfixes: true
 
+package_update: true
+package_upgrade: true
+package_reboot_if_required: true
+
+packages:
+  - cloudflared
+  - nginx
+  - yum-utils
+
 write_files:
   - path: /etc/cloudflared/config.yml
     content: |
@@ -139,7 +162,7 @@ runcmd:
 
   - setsebool -P httpd_can_network_connect 1
   - semanage port -a -t http_port_t -p tcp 8000
-  - yum install -y cloudflared nginx yum-utils
+
   - systemctl enable nginx
   - systemctl start nginx
 ```
@@ -149,9 +172,12 @@ runcmd:
 5. Update the `.env.production.local` file:
 
 ```shell
-SERVER_ADDRESS="<vultr-instance-ip-address>"
-SERVER_USERNAME="webadmin"
-SERVER_DIRECTORY="server"
+EMAIL_API_KEY="" # required
+EMAIL_SENDER="" # required
+
+SERVER_ADDRESS="<vultr-instance-ip-address>" # required
+SERVER_USERNAME="webadmin" # default value
+SERVER_DIRECTORY="server" # default value
 ```
 
 6. Build and send files to the server.
@@ -167,8 +193,9 @@ node --run deploy
 ssh webadmin@<vultr-instance-ip-address>
 ```
 
-8. Setup [fnm], Node.js, corepack, and [PM2].
+8. Setup [fnm], Node.js, [PM2], and [cloudflared].
 
+[cloudflared]: https://github.com/cloudflare/cloudflared#readme
 [fnm]: https://github.com/Schniz/fnm#readme
 [PM2]: https://pm2.keymetrics.io/
 
@@ -176,25 +203,18 @@ ssh webadmin@<vultr-instance-ip-address>
 # server
 
 curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
+source ~/.bashrc
 
 fnm install --lts # Installing Node v22.12.0
 fnm default 22 # use the version logged above
 
 corepack install --global pnpm
-pnpm setup
 
-source /home/webadmin/.bashrc
+pnpm setup
+source ~/.bashrc
 
 pnpm add pm2@latest --global
 pm2 install pm2-logrotate
-```
-
-9. Setup [cloudflared] and Cloudflare tunnel.
-
-[cloudflared]: https://github.com/cloudflare/cloudflared#readme
-
-```shell
-# server
 
 cloudflared tunnel login
 # 1. Visit the URL in the client browser.
@@ -217,9 +237,10 @@ sudo systemctl status cloudflared
 
 cloudflared tunnel route dns <Tunnel-UUID> <hostname>
 # Hostname is the desired domain. (e.g. example.com, sub.example.com)
+# Hostname must match the domain authorized in the cloudflared login.
 ```
 
-10. Start Node.js server using PM2
+9. Start Node.js server using PM2
 
 ```shell
 # server
