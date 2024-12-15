@@ -3,14 +3,7 @@
 import * as p from '@clack/prompts';
 import { exec, spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
-import {
-	appendFileSync,
-	cpSync,
-	existsSync,
-	readdirSync,
-	readFileSync,
-	writeFileSync
-} from 'node:fs';
+import { appendFileSync, cpSync, existsSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { chdir, cwd, exit } from 'node:process';
 import { setTimeout } from 'node:timers/promises';
@@ -108,10 +101,6 @@ await p.tasks([
 			const resolvedPath = path.resolve(cwd(), project.relativePath);
 			cpSync(import.meta.dirname + '/template', resolvedPath, { recursive: true });
 			chdir(resolvedPath); // NOTE CWD is now the project directory.
-			writeFileSync(
-				'package.json',
-				readFileSync('package.json', 'utf8').replaceAll('workspace:', '')
-			);
 			appendFileSync('svelte.config.js', `\n// created with ${pkg.name}@${pkg.version}\n`);
 			writeFileSync('.env.development.local', envDev);
 			writeFileSync('.env.production.local', envProd);

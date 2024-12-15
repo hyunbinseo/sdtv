@@ -47,7 +47,7 @@
 		"svelte-check": "^4.1.1",
 		"svelte-form-enhanced": "^0.2.1",
 		"svelte-html-modal": "^3.0.0",
-		"svelte-kitty": "workspace:^0.0.1",
+		"svelte-kitty": "workspace:^",
 		"tailwindcss": "^3.4.16",
 		"typescript": "^5.7.2",
 		"typescript-eslint": "^8.18.0",
