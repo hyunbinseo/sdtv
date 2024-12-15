@@ -1,5 +1,12 @@
 # create-svelte-kitty
 
+## 0.0.4
+
+### Patch Changes
+
+- 2578456: feat: support node adapter with pm2
+- 2578456: feat: support dual jwt signing keys
+
 ## 0.0.3
 
 ### Patch Changes
