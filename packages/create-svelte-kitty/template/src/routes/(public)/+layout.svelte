@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { PUBLIC_PRIVATE_PATH } from '$env/static/public';
 	import Container from '$lib/components/Container.svelte';
 	import logo from '$lib/static/logo-horizontal.svg';
@@ -27,8 +27,8 @@
 
 	const navLinkIsActive = (href: NavHref) =>
 		href === '/'
-			? $page.url.pathname === href //
-			: $page.url.pathname.startsWith(href);
+			? page.url.pathname === href //
+			: page.url.pathname.startsWith(href);
 </script>
 
 <Container {topNav} {bottomNav}>
