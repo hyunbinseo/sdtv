@@ -1,5 +1,11 @@
 # create-svelte-kitty
 
+## 0.0.5
+
+### Patch Changes
+
+- ad9df72: chore: migrate to svelte-kit $app/state
+
 ## 0.0.4
 
 ### Patch Changes
