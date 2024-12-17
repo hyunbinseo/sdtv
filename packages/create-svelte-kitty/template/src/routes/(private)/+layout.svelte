@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { invalidate } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { PUBLIC_ONBOARD_PATH, PUBLIC_PRIVATE_PATH } from '$env/static/public';
 	import Container from '$lib/components/Container.svelte';
 	import logo from '$lib/static/logo-horizontal.svg';
@@ -47,8 +47,8 @@
 		};
 	});
 
-	const isAdminPage = $derived($page.url.pathname.startsWith('/admin'));
-	const isOnboarding = $derived($page.url.pathname === PUBLIC_ONBOARD_PATH);
+	const isAdminPage = $derived(page.url.pathname.startsWith('/admin'));
+	const isOnboarding = $derived(page.url.pathname === PUBLIC_ONBOARD_PATH);
 
 	type NavHref = `/${string}`;
 
@@ -74,8 +74,8 @@
 
 	const navLinkIsActive = (href: NavHref) =>
 		href.endsWith('/')
-			? $page.url.pathname === href.slice(0, -1)
-			: $page.url.pathname.startsWith(href);
+			? page.url.pathname === href.slice(0, -1)
+			: page.url.pathname.startsWith(href);
 </script>
 
 <svelte:head>
