@@ -74,8 +74,8 @@ const generateEnv = () =>
 
 ROOT_ADMIN_CONTACT="${project.rootAdminContact}"
 
-EMAIL_API_KEY=""
 EMAIL_SENDER=""
+EMAIL_API_KEY=""
 
 JWT_SECRET_CURRENT="${randomBytes(32).toString('base64')}"
 JWT_SECRET_EXPIRED="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="

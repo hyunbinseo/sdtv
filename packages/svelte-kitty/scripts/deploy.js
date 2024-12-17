@@ -1,14 +1,18 @@
 import { execSync, spawnSync } from 'node:child_process';
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { env, loadEnvFile } from 'node:process';
-import { styleText } from 'node:util';
+import { parseEnv, styleText } from 'node:util';
 import { ip, object, parse, pipe, string, transform } from 'valibot';
 import pkg from '../package.json' with { type: 'json' };
 
 /* eslint-disable no-console */
 
 const rsyncIsAvailable = !spawnSync('rsync', ['--version']).error;
-if (!rsyncIsAvailable) throw new Error('rsync is not available');
+if (!rsyncIsAvailable) throw new Error('rsync is required. Is it installed in the system?');
+
+const parsedEnv = parseEnv(readFileSync('.env.production.local', 'utf8'));
+const envHasEmptyValues = Object.values(parsedEnv).some((value) => value === '');
+if (envHasEmptyValues) throw new Error('.env.production.local cannot contain empty values.');
 
 loadEnvFile('.env.production.local');
 
