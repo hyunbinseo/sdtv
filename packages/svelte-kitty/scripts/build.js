@@ -3,7 +3,7 @@ import { env } from 'node:process';
 import { build } from 'vite';
 
 if (!existsSync('svelte.config.js')) {
-	console.error('SvelteKit configuration file not found');
+	console.error('svelte.config.js not found in this directory');
 	process.exit(1);
 }
 
