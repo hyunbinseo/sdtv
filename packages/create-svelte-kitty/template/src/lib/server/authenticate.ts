@@ -27,7 +27,7 @@ type Payload = {
 } & Required<Pick<JWTPayload, 'iat' | 'exp' | 'jti' | 'sub'>>;
 
 export const authenticate = async (e: RequestEvent, userId: string, loginId: string | null) => {
-	if (!loginId && e.locals.session) error(500); // renewal
+	if (e.locals.session) error(500);
 
 	const user = await db.query.userTable.findFirst({
 		columns: { id: true },
