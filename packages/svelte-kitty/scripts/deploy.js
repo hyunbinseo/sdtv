@@ -1,6 +1,6 @@
 import { execSync, spawnSync } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
-import { env, loadEnvFile } from 'node:process';
+import { readFileSync } from 'node:fs';
+import { loadEnvFile } from 'node:process';
 import { parseEnv, styleText } from 'node:util';
 import { ip, object, parse, pipe, string, transform } from 'valibot';
 import pkg from '../package.json' with { type: 'json' };
@@ -33,23 +33,6 @@ const server = parse(
 );
 
 await import(import.meta.dirname + '/build.js');
-
-if (!env.BUILD_ID) throw new Error();
-
-writeFileSync(
-	'build/rsync.txt',
-	`build/${env.BUILD_ID}/
-build/start.js
-database/scheduled.ts
-drizzle/
-src/lib/server/database/
-.env.production
-.node-version
-drizzle.production.ts
-package.json
-pm2.config.cjs
-`
-);
 
 console.log();
 console.log(styleText('cyan', 'Transferring files using rsync over SSH:'));

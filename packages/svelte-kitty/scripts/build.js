@@ -11,6 +11,9 @@ const buildId = Date.now().toString();
 
 mkdirSync('build', { recursive: true });
 
+env.BUILD_ID = buildId;
+await build();
+
 writeFileSync(
 	'build/start.js',
 	`// THIS FILE IS GENERATED ON BUILD
@@ -23,5 +26,17 @@ await import('./${buildId}/index.js');
 `
 );
 
-env.BUILD_ID = buildId;
-await build();
+writeFileSync(
+	'build/rsync.txt',
+	`build/${env.BUILD_ID}/
+build/start.js
+database/scheduled.ts
+drizzle/
+src/lib/server/database/
+.env.production
+.node-version
+drizzle.production.ts
+package.json
+pm2.config.cjs
+`
+);
