@@ -250,6 +250,6 @@ nano .env.production
 # Update environment variables according to the comments.
 
 pnpm i --prod
-pnpm db:migrate@prod
+pnpm db:migrate:prod
 pm2 start pm2.config.cjs
 ```

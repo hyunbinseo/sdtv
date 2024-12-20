@@ -14,7 +14,7 @@
 		"format": "prettier --write .",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
-		"db:migrate@prod": "drizzle-kit migrate --config=drizzle.production.ts"
+		"db:migrate:prod": "drizzle-kit migrate --config=drizzle.production.ts"
 	},
 	"dependencies": {
 		"@hyunbinseo/tools": "^0.3.5",
