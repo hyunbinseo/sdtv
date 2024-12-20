@@ -40,13 +40,15 @@ Websites
 
 - Deploy a new [instance](https://my.vultr.com/deploy/) with the following options:
 
-| Item                | Value                      |
-| ------------------- | -------------------------- |
-| Choose Type         | Cloud Compute - Shared CPU |
-| Choose Image        | Rocky Linux 9 x64          |
-| Choose Plan         | Lowest Tier ($6/month)     |
-| Additional Features | ✅ Cloud-Init User-Data    |
-| Firewall Group      | SSH Only                   |
+| Item                | Value                                       |
+| ------------------- | ------------------------------------------- |
+| Location            | Any                                         |
+| Type                | Shared CPU                                  |
+| Plan                | `vc2-1c-1gb` ($5/month)                     |
+| Operating System    | Rocky Linux 9 x64                           |
+| SSH Keys            | None                                        |
+| Firewall Group      | SSH Only                                    |
+| Additional Features | ✅ Public IPv4<br />✅ Cloud-Init User-Data |
 
 - Add the following content into the Cloud-Init user data text field.
 - Add your SSH public key(s) to the `ssh_authorized_keys` array.
