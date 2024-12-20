@@ -28,15 +28,25 @@ await import('./${buildId}/index.js');
 
 writeFileSync(
 	'build/rsync.txt',
-	`build/${env.BUILD_ID}/
-build/start.js
-database/scheduled.ts
-drizzle/
-src/lib/server/database/
-.env.production
-.node-version
-drizzle.production.ts
-package.json
-pm2.config.cjs
+	`
++ /build/
++ /build/${env.BUILD_ID}/client/_app/***
+- /build/${env.BUILD_ID}/client/*
++ /build/${env.BUILD_ID}/***
++ /build/start.js
++ /database/
++ /database/scheduled.ts
++ /drizzle/***
++ /src/
++ /src/lib/
++ /src/lib/server/
++ /src/lib/server/database/***
++ /static/***
++ /.env.production
++ /.node-version
++ /drizzle.production.ts
++ /package.json
++ /pm2.config.cjs
+- *
 `
 );

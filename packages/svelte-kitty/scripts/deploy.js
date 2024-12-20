@@ -47,7 +47,7 @@ console.log(styleText('cyan', 'Transferring files using rsync over SSH:'));
 console.log('Tap the security key if 2FA is required.');
 
 execSync(
-	`rsync -avzru --files-from=build/rsync.txt ./ ${server.username}@${server.address}:${server.directory}`,
+	`rsync -au --include-from=build/rsync.txt ./ ${server.username}@${server.address}:${server.directory}`,
 	{ stdio: 'inherit' }
 );
 

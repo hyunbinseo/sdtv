@@ -113,7 +113,7 @@ write_files:
         listen 8000;
 
         location / {
-          root /home/webadmin/static;
+          root /home/webadmin/server/static;
           try_files $uri @sveltekit;
           expires 30d;
         }
@@ -142,7 +142,7 @@ write_files:
       fi
 
 runcmd:
-  - mkdir -p /home/webadmin/static
+  - mkdir -p /home/webadmin/server/static
   - chown -R webadmin:webadmin /home/webadmin
   - chmod 750 /home/webadmin
 
@@ -156,9 +156,9 @@ runcmd:
   - setfacl -R -m u:webadmin:r-- /var/log/nginx/*
   - setfacl -d -m u:webadmin:r-- /var/log/nginx
 
-  - setfacl -m u:nginx:r-x /home/webadmin/static
-  - setfacl -R -m u:nginx:r-- /home/webadmin/static/*
-  - setfacl -d -m u:nginx:r-- /home/webadmin/static
+  - setfacl -m u:nginx:r-x /home/webadmin/server/static
+  - setfacl -R -m u:nginx:r-- /home/webadmin/server/static/*
+  - setfacl -d -m u:nginx:r-- /home/webadmin/server/static
 
   - setsebool -P httpd_can_network_connect 1
   - semanage port -a -t http_port_t -p tcp 8000
