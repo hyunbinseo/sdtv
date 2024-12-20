@@ -34,6 +34,7 @@ const project = await p.group(
 						existsSync(resolvedPath) && //
 						readdirSync(resolvedPath).length;
 					if (directoryIsNotEmpty) return 'Provided directory is not empty.';
+					return;
 				}
 			}),
 		rootAdminContact: () =>
@@ -43,6 +44,7 @@ const project = await p.group(
 				validate: (value) => {
 					const parsedEmail = safeParse(pipe(string(), email()), value);
 					if (!parsedEmail.success) return 'Please enter a valid email.';
+					return;
 				}
 			}),
 		emailProvider: () =>
