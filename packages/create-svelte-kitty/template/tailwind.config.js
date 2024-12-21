@@ -56,19 +56,35 @@ export default {
 					'background-size': '100% 100%',
 					'background-position': 'center',
 					'background-repeat': 'no-repeat'
-				}
-			});
-			// Actual styles are defined in the `app.css` file.
-			// Component order matches Prettier sorting order.
-			addComponents({
-				'.ua-anchor': {},
-				'.btn': {},
-				'.btn-xs': {},
-				'.btn-sm': {},
-				'.btn-lg': {},
-				'.btn-primary': {},
-				'.btn-secondary': {},
-				'.btn-danger': {},
+				},
+				'.ua-anchor': {
+					'@apply cursor-pointer text-blue-800 underline visited:text-violet-800 active:text-red-800':
+						''
+				},
+				'.btn': {
+					'@apply rounded-md px-3 py-2 text-center shadow-sm transition-colors text-smallish': ''
+				},
+				'.btn-xs': {
+					'@apply rounded px-2 py-1 text-sm': ''
+				},
+				'.btn-sm': {
+					'@apply px-2.5 py-1.5': ''
+				},
+				'.btn-lg': {
+					'@apply px-3.5 py-2.5': ''
+				},
+				'.btn-primary': {
+					'@apply bg-blue-600 text-white hover:bg-blue-700 disabled:bg-gray-400 disabled:text-gray-100 disabled:hover:bg-none':
+						''
+				},
+				'.btn-secondary': {
+					'@apply bg-blue-100 text-blue-700 hover:bg-blue-200 disabled:bg-gray-200 disabled:text-gray-500 disabled:hover:bg-none':
+						''
+				},
+				'.btn-danger': {
+					'@apply bg-red-600 text-white hover:bg-red-700 disabled:bg-gray-400 disabled:text-gray-100 disabled:hover:bg-none':
+						''
+				},
 				'.btn-spinner': {
 					'@apply flex items-center justify-center gap-x-[0.3em]': '',
 					'@apply before:size-[1em] before:origin-center before:animate-spin before:rounded-full before:border-[0.2em] before:border-solid before:border-current before:border-t-transparent before:opacity-50':
