@@ -4,10 +4,10 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "svelte-kitty build",
+		"build:send": "svelte-kitty build --send",
 		"preview": "vite preview",
 		"start": "node build/start",
 		"start:pm2": "pm2 start pm2.config.cjs",
-		"deploy": "svelte-kitty deploy",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",

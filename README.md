@@ -4,7 +4,7 @@ A SvelteKit starter template built for self-hosting:
 
 ```shell
 npm create svelte-kitty # setup
-npm run deploy # deploy
+npm run build:send # and deploy
 ```
 
 For initial deployment, follow this [guide](docs/deployment.md) to setup VPS and SSL.

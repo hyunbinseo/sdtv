@@ -183,7 +183,7 @@ SERVER_DIRECTORY="server" # default value
 6. Build and send files to the server.
 
 ```shell
-node --run deploy
+node --run build:send
 ```
 
 7. SSH into the server.

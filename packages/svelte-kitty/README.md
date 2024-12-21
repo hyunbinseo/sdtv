@@ -15,7 +15,7 @@ bun install svelte-kitty
 {
   "scripts": {
     "build": "svelte-kitty build",
-    "deploy": "svelte-kitty deploy"
+    "build:send": "svelte-kitty build --send"
   }
 }
 ```
