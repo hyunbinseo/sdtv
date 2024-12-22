@@ -78,8 +78,11 @@ write_files:
 
   - path: /etc/nginx/conf.d/default.conf
     content: |
+      limit_req_zone $binary_remote_addr zone=sveltekit_limit:10m rate=10r/s;
+
       server {
         listen 8000;
+        client_max_body_size 1m;
 
         location / {
           root /home/webadmin/server/static;
@@ -87,7 +90,12 @@ write_files:
           expires 30d;
         }
 
+        location ~ \.(css|js|woff2)$ {
+          proxy_pass http://localhost:3000;
+        }
+
         location @sveltekit {
+          limit_req zone=sveltekit_limit burst=20 nodelay;
           proxy_pass http://localhost:3000;
         }
       }
