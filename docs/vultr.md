@@ -61,8 +61,8 @@ yum_repos:
     module_hotfixes: true
 
 package_update: true
-# package_upgrade: true
-# package_reboot_if_required: true
+package_upgrade: true
+package_reboot_if_required: true
 
 packages:
   - cloudflared
@@ -109,6 +109,13 @@ write_files:
         export PATH="$FNM_PATH:$PATH"
         eval "$(fnm env --use-on-cd)"
       fi
+
+bootcmd:
+  - fallocate -l 2G /swapfile
+  - chmod 600 /swapfile
+  - mkswap /swapfile
+  - swapon /swapfile
+  - echo '/swapfile none swap sw 0 0' >> /etc/fstab
 
 runcmd:
   - setfacl -m u:webadmin:rw- /etc/cloudflared/config.yml
