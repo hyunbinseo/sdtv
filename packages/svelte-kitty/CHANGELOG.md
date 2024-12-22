@@ -1,5 +1,12 @@
 # svelte-kitty
 
+## 0.0.4
+
+### Patch Changes
+
+- c6a6dd0: feat: rewrite, support rsync dry-run
+- 9a08fb2: feat: exclude bundled assets in rsync
+
 ## 0.0.3
 
 ### Patch Changes
