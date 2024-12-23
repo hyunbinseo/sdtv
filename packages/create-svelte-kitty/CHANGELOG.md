@@ -1,5 +1,11 @@
 # create-svelte-kitty
 
+## 0.0.6
+
+### Patch Changes
+
+- 5aef8b4: fix: check session on authentication
+
 ## 0.0.5
 
 ### Patch Changes
