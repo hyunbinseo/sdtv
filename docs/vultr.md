@@ -136,10 +136,7 @@ runcmd:
 
   - mkdir -p /home/webadmin/server/static
   - chown -R webadmin:webadmin /home/webadmin
-  - chmod 750 /home/webadmin
-
-  - setfacl -R -m u:webadmin:rwx /home/webadmin
-  - setfacl -d -m u:webadmin:rwx /home/webadmin
+  - chmod 700 /home/webadmin
 
   - setfacl -R -m u:nginx:r-x /home/webadmin/server/static
   - setfacl -d -m u:nginx:r-x /home/webadmin/server/static
