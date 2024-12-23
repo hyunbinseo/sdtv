@@ -111,4 +111,8 @@ nano .env.production
 pnpm i --prod
 pnpm db:migrate:prod
 node --run start:pm2
+
+EDITOR=nano crontab -e
+# Add this line to start the PM2 applications on system startup:
+# @reboot source ~/.bashrc && cd ~/server && node --run start:pm2
 ```
